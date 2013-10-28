@@ -11,7 +11,8 @@ class User(models.Model):
 class Player(models.Model): 
     player_name = models.CharField(max_length=250, primary_key=True)
     
-class PlayerGameStat(models.Model):
+class GameStat(models.Model):
+    player = models.ForeignKey(Player)
     
 class Game(models.Model):
     
