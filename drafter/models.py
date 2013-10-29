@@ -3,9 +3,12 @@ from django.db import models
 # Create your models here.
 
 
-class FantasyTeam(models.Model):
-    
 class User(models.Model):
+    
+class League(models.Model):
+    
+
+class FantasyTeam(models.Model):
     
 # Player, as well as their aggregate statistics
 class Player(models.Model): 
