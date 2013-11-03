@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^(?P<league_id>\d+)/?$', views.league_focus),
     #url(r'^login/$', views.login)
     url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page' : '../'}),
 )

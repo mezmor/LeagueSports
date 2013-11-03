@@ -10,8 +10,9 @@
 	    <meta name="author" content="">
 	
 	    <!-- Styles -->
-	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css"> 
-	    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.js"></script>
+	    <!--  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css">  -->
+	    <!-- <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.js"></script>  -->
+	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themed/bootstrap.css">
 	    <style type="text/css">
 	      body {
 	        padding-top: 60px;
@@ -23,8 +24,6 @@
 	    <!--[if lt IE 9]>
 	      <script src="../assets/js/html5shiv.js"></script>
 	    <![endif]-->
-	
-	    <style type="text/css"></style>
     </head>
 	<body>
 		<div class="navbar navbar-default navbar-fixed-top">
@@ -35,15 +34,18 @@
 		    <div class="navbar-collapse collapse" id="navbar-main">
 		      <ul class="nav navbar-nav">
 		        <li>
-		          <a href="#">Help</a>
+		          <a href="#">Leagues</a>
 		        </li>
 		        <li>
-		          <a href="#">Blog</a>
+		          <a href="#">Stats</a>
 		        </li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
-		        <li><a href="../login">Login</a></li>
-		        <li><a href="#">Sign up</a></li>
+		        {% if user.is_authenticated %}
+                    <li><a href="../logout">Logout</a></li>
+                {% else %}
+                    <li><a href="../login">Login</a></li>
+                {% endif %}
 		      </ul>
 		    </div>
 		  </div>
