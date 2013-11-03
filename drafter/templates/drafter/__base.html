@@ -1,0 +1,33 @@
+{% extends 'drafter/__bootstrap.html' %}
+
+{% load bootstrap3 %}
+
+{% block title %}LeagueSports{% endblock %}
+
+{% block bootstrap3_content %}
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="../" class="navbar-brand">LeagueSports</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="#">Help</a>
+            </li>
+            <li>
+              <a href="#">Blog</a>
+            </li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../login/">Login</a></li>
+            <li><a href="#">Sign up</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    
+{% block content %} {% endblock %}
+{% endblock %}
