@@ -19,7 +19,7 @@ class Team(models.Model):
 class FantasyTeam(models.Model):
     manager = models.ForeignKey(User)
     league = models.ForeignKey(League)
-    public = models.BooleanField()
+    public = models.BooleanField(default=True)
     name = models.CharField(max_length=20)
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
