@@ -9,7 +9,7 @@ def index(request):
     return render(request, 'drafter/index.html')
 
 def login(request):
-    return HttpResponse("Login screen placeholder")
+    return render(request, 'drafter/login.html')
 
 def league_focus(request, league_id):
     return HttpResponse("League screen placeholder for league: %s" % league_id)

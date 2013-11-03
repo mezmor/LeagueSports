@@ -1,37 +1,53 @@
-{% extends 'drafter/__bootstrap.html' %}
+<!DOCTYPE html>
 
-{% load bootstrap3 %}
-
-{% block title %}LeagueSports{% endblock %}
-
-{% block bootstrap3_content %}
-    <div class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a href="../" class="navbar-brand">LeagueSports</a>
-        </div>
-        <div class="navbar-collapse collapse" id="navbar-main">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="#">Help</a>
-            </li>
-            <li>
-              <a href="#">Blog</a>
-            </li>
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Login <strong class="caret"></strong></a>
-            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-              <!-- Login form here -->
-            </div>
-          </li>
-            <li><a href="#">Sign up</a></li>
-          </ul>
-
-        </div>
-      </div>
-    </div>
-{% block content %}{% endblock %}
-{% endblock %}
+<html>
+    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <meta charset="utf-8">
+	    <title>{% block title %}{% endblock %}</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+	
+	    <!-- Styles -->
+	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css"> 
+	    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.js"></script>
+	    <style type="text/css">
+	      body {
+	        padding-top: 60px;
+	        padding-bottom: 40px;
+	      }
+	    </style>
+	
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="../assets/js/html5shiv.js"></script>
+	    <![endif]-->
+	
+	    <style type="text/css"></style>
+    </head>
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top">
+		  <div class="container">
+		    <div class="navbar-header">
+		      <a href="../" class="navbar-brand">LeagueSports</a>
+		    </div>
+		    <div class="navbar-collapse collapse" id="navbar-main">
+		      <ul class="nav navbar-nav">
+		        <li>
+		          <a href="#">Help</a>
+		        </li>
+		        <li>
+		          <a href="#">Blog</a>
+		        </li>
+		      </ul>
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="../login">Login</a></li>
+		        <li><a href="#">Sign up</a></li>
+		      </ul>
+		    </div>
+		  </div>
+		</div>
+		{% block content %} {% endblock %}
+	</body>
+</html>
