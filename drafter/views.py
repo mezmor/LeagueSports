@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from django.template import Context, RequestContext
 
 
 def index(request):

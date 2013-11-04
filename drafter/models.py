@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models.fields import PositiveIntegerField
 
 # Models
@@ -9,6 +9,9 @@ class League(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+class User(AbstractUser):
+    leagues = models.ManyToManyField(League)
 
 class Team(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
