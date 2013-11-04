@@ -54,7 +54,11 @@
 		                <div class="form-group">
 		                  <input id="id_password" name="password" type="password" placeholder="Password" class="form-control input-sm">
 		                </div>
-		                <input type="submit" class="btn btn-sm btn-warning" />
+		                {% if form.errors %}
+                          <input type="submit" class="btn btn-sm btn-warning" value="Error!"/>
+                        {% else %}
+		                  <input type="submit" class="btn btn-sm btn-warning" />
+		                {% endif %}
 		                <input type="hidden" name="next" value="{{ next }}" />
 	                </form> 
                 {% endif %}
