@@ -11,9 +11,8 @@
 	
 	    <!-- Styles -->
 	    <!--  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css">  -->
-	    <!-- <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.js"></script>  -->
-	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themed/bootstrap.css">
 	    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.js"></script>
+	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themed/bootstrap.css">
 	    <style type="text/css">
 	      body {
 	        padding-top: 60px;
@@ -25,7 +24,7 @@
 	    <!--[if lt IE 9]>
 	      <script src="../assets/js/html5shiv.js"></script>
 	    <![endif]-->
-	    {% block head_html %}{% endblock %}
+	    {% block head %}{% endblock %}
     </head>
 	<body>
 		<div class="navbar navbar-default navbar-fixed-top">
@@ -44,9 +43,9 @@
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		        {% if user.is_authenticated %}
-                    <li><a href="../logout">Logout</a></li>
+                    <li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
                 {% else %}
-	                <form class="navbar-form navbar-right form-inline" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+	                <form class="navbar-form form-inline" method="post" action="{% url 'django.contrib.auth.views.login' %}">
 		                {% csrf_token %}
 		                <div class="form-group">
 		                  <input id="id_username" maxlength="254" name="username" type="text" placeholder="Username" class="form-control input-sm">

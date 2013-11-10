@@ -1,11 +1,29 @@
 {% extends 'drafter/_trifold.html' %}
 {% block title %}LeagueSports - Main Page{% endblock %}
 
-{% block left_content %}<h2>Heading</h2>
+{% block left_content %}
+          <h2>Heading</h2>
           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> {% endblock %}
-{% block center_content %}<h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> {% endblock %}
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+{% endblock %}
+{% block center_content %}
+{% endblock %}
 {% block right_content %}
+    {% if not user.is_authenticated %}
+	    <div class="well">
+	      <form class="bs-example form-horizontal">
+	        <fieldset>
+	          <h3>Sign up!</h3>
+	          <div class="form-group">
+	            <div class="col-lg-10">
+	              <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <input type="text">
+	          </div>
+	        </fieldset>
+	      </form>
+	    </div>
+	{% endif %}
 {% endblock %}
