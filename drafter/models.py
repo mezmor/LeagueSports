@@ -63,11 +63,13 @@ class RawGameData(models.Model):
 class RawPlayerData(models.Model):
     game = models.ForeignKey(RawGameData, related_name='player_data')
     player_name = models.CharField(max_length = 20)
+    player_name.db_index = True
     team_color = models.CharField(max_length = 10)
     champion = models.CharField(max_length = 50)
     kills = models.PositiveIntegerField()
     deaths = models.PositiveIntegerField()
     assists = models.PositiveIntegerField()
+    gold = models.PositiveIntegerField()
     cs = models.PositiveIntegerField()
     summonerspells = models.CharField(max_length = 50)
     items = models.CharField(max_length = 500)
