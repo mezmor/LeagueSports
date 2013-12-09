@@ -41,49 +41,38 @@ class Player(models.Model):
     
     def __unicode__(self):
         return self.name
-    
-    
-class Game(models.Model):
-    winner = models.ForeignKey(Team, related_name='games_won')
+        
+
+class RawGameData(models.Model):
+    # id is auto generated as primary key
+    blueTeam = models.CharField(max_length = 10)
+    redTeam = models.CharField(max_length = 10)
+    blueTeamSeriesScore = models.PositiveIntegerField()
+    redTeamSeriesScore = models.PositiveIntegerField()
+    blueTeamBan1 = models.CharField(max_length = 20)
+    blueTeamBan2 = models.CharField(max_length = 20)
+    blueTeamBan3 = models.CharField(max_length = 20)
+    redTeamBan1 = models.CharField(max_length = 20)
+    redTeamBan2 = models.CharField(max_length = 20)
+    redTeamBan3 = models.CharField(max_length = 20)
     date = models.DateTimeField()
     duration = models.TimeField()
-    blue_score = PositiveIntegerField(default=0)
-    red_score = PositiveIntegerField(default=0)
+    tournament = models.CharField(max_length = 100)
     
-    blue_ban_one = models.CharField(max_length=20)
-    blue_ban_two = models.CharField(max_length=20)
-    blue_ban_three = models.CharField(max_length=20)
-    red_ban_one = models.CharField(max_length=20)
-    red_ban_two = models.CharField(max_length=20)
-    red_ban_three = models.CharField(max_length=20)
     
-    def __unicode__(self):
-        return self.date
-    
-
-class PlayerGameStat(models.Model):
-    player = models.ForeignKey(Player, related_name='game_stats')
-    game = models.ForeignKey(Game, related_name='player_stats')
-    
-    COLOR_CHOICES = (
-            ('blue', 'blue'),
-            ('red', 'red'))
-    team_color = models.CharField(choices=COLOR_CHOICES, max_length=5)
-    
+class RawPlayerData(models.Model):
+    game = models.ForeignKey(RawGameData, related_name='player_data')
+    player_name = models.CharField(max_length = 20)
+    team_color = models.CharField(max_length = 10)
+    champion = models.CharField(max_length = 50)
     kills = models.PositiveIntegerField()
     deaths = models.PositiveIntegerField()
     assists = models.PositiveIntegerField()
-    gold = models.PositiveIntegerField()
-    creeps = models.PositiveIntegerField()
-    
-    champion = models.CharField(max_length=20)
-    summoner_one = models.CharField(max_length=20)
-    summoner_two = models.CharField(max_length=20)
-    items = models.CharField(max_length=250) # Pipe delimited
+    cs = models.PositiveIntegerField()
+    summonerspells = models.CharField(max_length = 50)
+    items = models.CharField(max_length = 500)
     
     class Meta:
-        unique_together = (('player', 'game'), )
-        
-    def __unicode__(self):
-        return (self.player, self.game)
-        
+        unique_together = (('game', 'player_name'), )
+    
+    

@@ -10,9 +10,12 @@
 	    <meta name="author" content="">
 	
 	    <!-- Styles -->
-	    <!--  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css">  -->
 	    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.js"></script>
-	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themed/bootstrap.css">
+	    <script type="text/javascript" src="{{STATIC_URL}}js/jquery-2.0.3.js"></script>
+	    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themed/bootstrap.css"/>
+
+	    
+	    
 	    <style type="text/css">
 	      body {
 	        padding-top: 60px;
@@ -38,7 +41,7 @@
 		          <a href="#">Leagues</a>
 		        </li>
 		        <li>
-		          <a href="#">Stats</a>
+		          <a href="{% url 'drafter.views.stats' %}">Stats</a>
 		        </li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">

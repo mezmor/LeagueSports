@@ -1,6 +1,7 @@
 # Project files
 .project
 .pydevproject
+.idea/
 
 # Compile files
 *.pyc

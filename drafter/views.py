@@ -15,6 +15,9 @@ def index(request):
 def league_focus(request, league_id):
     return HttpResponse("League screen placeholder for league: %s" % league_id)
 
+def stats(request):
+    return render(request, 'drafter/stats.html');
+
 #@login_required
 #def account_focus(request):
 #    return render_to_response('drafter/index.html', 
