@@ -1,0 +1,61 @@
+{% extends 'drafter/_trifold.html' %}
+{% block title %}LeagueSports - Statistics{% endblock %}
+{% block head %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/underscore.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/backbone.js"></script>
+    <style type="text/css">
+	    #playerList {
+	      
+	      overflow: auto;
+	    }
+    </style>
+{% endblock %}
+
+{% block banner %}
+{% endblock %}
+
+{% block left_content %}
+{% endblock %}
+{% block center_content %}
+{% endblock %}
+{% block right_content %}
+   <script type="text/javascript">
+   (function($){
+        var PlayerList = Backbone.View.extend({
+            el: $('#right-content'),
+        
+            initialize: function() {
+                _.bindAll(this, 'render', 'addPlayerName');
+               
+                this.render();
+                
+                var name_data = [];
+                $.ajax({url: "{% url 'explorer.views.get_player_names' %}",
+                    dataType: "json",
+                    async: false,
+                    success: function(data) {
+                        name_data = data;
+                    }
+                });
+                console.log(name_data[0]);
+                for(var key in name_data){
+                    if(name_data.hasOwnProperty(key)){
+                        this.addPlayerName(name_data[key]);
+                    }
+                }
+            },
+            
+            render: function() {
+                $(this.el).append("<div id='playerList'><ul class='list-group'></ul></div>");
+                $('ul.list-group', this.el).append("<a class='list-group-item active'>Player : Sample Size</a>");
+            },
+            
+            addPlayerName: function(playerData){
+            	$('ul.list-group', this.el).append("<li class='list-group-item'><span class='badge'>"+playerData['sample']+"</span>"+playerData['name']+"</li>");
+            }
+        });
+            
+        var playerList = new PlayerList();
+    })(jQuery);
+    </script>
+{% endblock %}

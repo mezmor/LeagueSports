@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     url(r'^(?P<league_id>\d+)/?$', views.league_focus),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'drafter/index.html'}),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/' }),
-    url(r'^stats/$', views.stats),
+    url(r'^tutorial/$', views.tutorial),
 )

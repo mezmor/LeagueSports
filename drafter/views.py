@@ -1,8 +1,10 @@
+import json
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
+from drafter.models import RawPlayerData
 
 
 
@@ -15,8 +17,9 @@ def index(request):
 def league_focus(request, league_id):
     return HttpResponse("League screen placeholder for league: %s" % league_id)
 
-def stats(request):
-    return render(request, 'drafter/stats.html');
+
+def tutorial(request):
+    return render(request, 'drafter/tutorial.html')
 
 #@login_required
 #def account_focus(request):
