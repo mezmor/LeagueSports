@@ -1,10 +1,7 @@
-import json
 from django.http import HttpResponse
-from django.shortcuts import render, render_to_response
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
-from drafter.models import RawPlayerData
 
 
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from drafter.models import *
+from explorer.models import *
 from django.contrib.sites.models import Site
 
 class LeagueAdmin(admin.ModelAdmin):

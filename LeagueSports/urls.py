@@ -15,5 +15,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
     url(r'', include('drafter.urls')),
-    url(r'ex/', include('explorer.urls')),
+    url(r'explore/', include('explorer.urls')),
 )

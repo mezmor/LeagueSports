@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-from drafter.models import RawPlayerData
+from explorer.models import RawPlayerData
 
 def explorer(request):
     return render(request, 'explorer/index.html');
