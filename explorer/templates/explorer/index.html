@@ -29,20 +29,16 @@
                
                 this.render();
                 
-                var name_data = [];
+                var response = {};
                 $.ajax({url: "{% url 'explorer.views.get_player_names' %}",
                     dataType: "json",
-                    async: false,
                     success: function(data) {
-                        name_data = data;
+                        response = data;
+                        for(var iter in response.data){
+                            playerList.addPlayerName(response.data[iter]);
+                        }
                     }
                 });
-                console.log(name_data[0]);
-                for(var key in name_data){
-                    if(name_data.hasOwnProperty(key)){
-                        this.addPlayerName(name_data[key]);
-                    }
-                }
             },
             
             render: function() {
