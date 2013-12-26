@@ -6,3 +6,4 @@
 # Compile files
 *.pyc
 LeagueSports/*.pyc
+main.db
