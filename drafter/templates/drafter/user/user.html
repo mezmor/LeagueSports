@@ -1,5 +1,5 @@
 {% extends 'drafter/_trifold.html' %}
-{% block title %}LeagueSports - League Details{% endblock %}
+{% block title %}LeagueSports - User Details{% endblock %}
 
 {% block center_banner %}
 
@@ -16,12 +16,11 @@
             </thead>
             
             <tbody>
-	            <tr>
-	                <td>{{ league.id }}</td>
-	                <td>{{ league.name }}</td>
-	                <td>{{ league.size }}</td>
-	                <td>{{ league.commish }}</td>
-	            </tr>
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.date_joined }}</td>
+                    <td>{{ user.leagues }}</td>
+                </tr>
             </tbody>
         </table>
     </div>

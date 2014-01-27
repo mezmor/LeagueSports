@@ -1,0 +1,15 @@
+{% extends 'drafter/_trifold.html' %}
+{% block title %}LeagueSports - New User{% endblock %}
+
+
+{% block left_content %}
+{% endblock %}
+{% block center_content %}
+    <form action="{% url 'drafter.views.new_user' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+{% block right_content %}
+{% endblock %}

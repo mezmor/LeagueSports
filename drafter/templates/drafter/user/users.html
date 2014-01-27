@@ -1,8 +1,7 @@
 {% extends 'drafter/_trifold.html' %}
-{% block title %}LeagueSports - League Details{% endblock %}
+{% block title %}LeagueSports - User List{% endblock %}
 
 {% block center_banner %}
-
 {% endblock %}
 
 {% block left_content %}
@@ -16,12 +15,12 @@
             </thead>
             
             <tbody>
-	            <tr>
-	                <td>{{ league.id }}</td>
-	                <td>{{ league.name }}</td>
-	                <td>{{ league.size }}</td>
-	                <td>{{ league.commish }}</td>
-	            </tr>
+                {% for user in users %}
+	                <tr>
+	                    <td><a href="{% url 'drafter.views.user' user.id %}">{{ user.username }}</a></td>
+	                    <td>{{ user.date_joined }}</td>
+	                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
