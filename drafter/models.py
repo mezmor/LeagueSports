@@ -1,19 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Models
+
+class User(AbstractUser):
+    class Meta:
+        unique_together = (('username', 'email'), )
  
 class League(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, blank=False)
+    public = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
+    size = models.PositiveIntegerField(default = 12, validators=[MinValueValidator(2), MaxValueValidator(32)])
     
-    def __unicode__(self):
-        return self.name
+    commish = models.ForeignKey(User, related_name='managed_leagues')
+    users = models.ManyToManyField(User, related_name='leagues', blank=True)
     
-class User(AbstractUser):
-    leagues = models.ManyToManyField(League)
-
-class Team(models.Model):
-    name = models.CharField(max_length=64, primary_key=True)
     
     def __unicode__(self):
         return self.name
@@ -21,17 +24,22 @@ class Team(models.Model):
 class FantasyTeam(models.Model):
     manager = models.ForeignKey(User)
     league = models.ForeignKey(League)
-    public = models.BooleanField(default=True)
     name = models.CharField(max_length=20)
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
-#    ties = models.PositiveIntegerField(default=0)
+    ties = models.PositiveIntegerField(default=0)
     
     class Meta:
         unique_together = (('manager', 'league'), )
         
     def __unicode__(self):
         return (self.manager, self.league)
+
+class Team(models.Model):
+    name = models.CharField(max_length=64, primary_key=True)
+    
+    def __unicode__(self):
+        return self.name
     
 class Player(models.Model): 
     name = models.CharField(max_length=20, primary_key=True)
@@ -39,5 +47,3 @@ class Player(models.Model):
     
     def __unicode__(self):
         return self.name
-
-    

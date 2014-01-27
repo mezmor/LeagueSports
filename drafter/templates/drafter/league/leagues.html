@@ -1,0 +1,35 @@
+{% extends 'drafter/_trifold.html' %}
+{% block title %}LeagueSports - League List{% endblock %}
+
+{% block center_banner %}
+{% if user.is_authenticated %}
+    <a href="{% url 'drafter.views.new_league' %}"><button type="button" class="btn btn-default">New League</button></a>
+{% endif %}
+{% endblock %}
+
+{% block left_content %}
+{% endblock %}
+{% block center_content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for league in leagues %}
+                    {% if league.public %}
+		                <tr>
+		                    <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
+		                    <td>{{ league.size }}</td>
+		                    <td>{{ league.commish }}</td>
+		                </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block right_content %}
+{% endblock %}

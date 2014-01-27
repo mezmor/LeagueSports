@@ -1,25 +1,31 @@
-from django.http import HttpResponse
 from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
-from django.template import RequestContext
-
+from drafter.forms import LeagueForm
+from django.contrib.auth.decorators import login_required
+from drafter.models import League
 
 
 def index(request):
     # if request is POST, register the user
-    form = UserCreationForm()
-    context = { 'register_form' : form,  }
-    return render(request, 'drafter/index.html', context, context_instance=RequestContext(request))
+    return render(request, 'drafter/index.html')
 
-def league_focus(request, league_id):
-    return HttpResponse("League screen placeholder for league: %s" % league_id)
+def leagues(request):
+    leagues = list(League.objects.all())
+    return render(request, 'drafter/league/leagues.html', { 'leagues': leagues })
 
+def league(request, id):
+    league = League.objects.get(id=id)
+    return render(request, 'drafter/league/league.html', { 'league': league })
 
-def tutorial(request):
-    return render(request, 'drafter/tutorial.html')
-
-#@login_required
-#def account_focus(request):
-#    return render_to_response('drafter/index.html', 
-#                              {'is_auth' : request.user.is_authenticated()},
-#                              context_instance=RequestContext(request))
+@login_required
+def new_league(request):
+    if request.method == 'POST': # If the form was submitted...
+        form = LeagueForm(request.POST) # Make a form bound to the POST data
+        if form.is_valid():
+            new_league = form.save(commit=False)
+            new_league.commish = request.user
+            new_league.save()
+            return leagues(request) 
+    else:
+        form = LeagueForm() # Unbound form
+        
+    return render(request, 'drafter/league/new.html', { 'form': form })

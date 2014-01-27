@@ -16,6 +16,8 @@ class RawGameData(models.Model):
     duration = models.TimeField()
     tournament = models.CharField(max_length = 100)
     
+    # week = models.PositiveIntegerField()
+    
     
 class RawPlayerData(models.Model):
     game = models.ForeignKey(RawGameData, related_name='player_data')

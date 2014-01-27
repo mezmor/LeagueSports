@@ -3,7 +3,9 @@
 {% block content %}
 	<div class="container">
 	   <div class="row">
-	       <div class="span12" style="height: 50px">{% block banner %}{% endblock %}</div>
+	       <div class="col-md-2" id="left-banner">{% block left_banner %}{% endblock %}</div>
+           <div class="col-md-8" id="center-banner">{% block center_banner %}{% endblock %}</div>
+           <div class="col-md-2" id="right-banner">{% block right_banner %}{% endblock %}</div>
 	   </div>
 	   <div class="row">
 	       <div class="col-md-2" id="left-content">{% block left_content %}{% endblock %}</div>
