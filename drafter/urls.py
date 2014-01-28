@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^register/$', views.new_user),
     url(r'^users/$', views.users),
     url(r'^users/(?P<id>\d+)/$', views.user),
+    url(r'^users/(?P<username>[\w.@+-]+)/$', views.user),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'drafter/index.html'}),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/' }),
     
