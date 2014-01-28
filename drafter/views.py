@@ -14,6 +14,8 @@ def leagues(request):
 def league(request, id):
     league = League.objects.get(id=id)
     if league.public or league in request.user.leagues.all() or league.commish == request.user:
+        if league.commish == request.user:
+            request.user.is_commish = True
         return render(request, 'drafter/league/league.html', { 'league': league })
     else:
         return leagues(request)
@@ -44,7 +46,6 @@ def user(request, id=None, username=None): # id=None, nick=None, for nick in url
         user = User.objects.get(username=username)
     
     return render(request, 'drafter/user/user.html', { 'user': user })
-
 
 def new_user(request):
     if request.method == 'POST': # If the form was submitted...

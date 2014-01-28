@@ -33,4 +33,7 @@
     </div>
 {% endblock %}
 {% block right_content %}
+    {% if user.is_commish %}
+        <!-- Commish panel -->
+    {% endif %}
 {% endblock %}
