@@ -15,7 +15,6 @@ def new_league(request):
             new_league = form.save(commit=False)
             new_league.commish = request.user
             new_league.save()
-            #new_league.users.add(request.user)
             new_team = FantasyTeam(manager=request.user, league=new_league)
             new_team.save()
             return league(request, new_league.id)
@@ -31,7 +30,8 @@ def league(request, id):
             request.user.commish = True
         if request.user.is_draftable(league):
             request.user.draftable = True
-        return render(request, 'drafter/league/league.html', { 'league': league })
+        teams = FantasyTeam.objects.filter(league=league)
+        return render(request, 'drafter/league/league.html', { 'league': league, 'teams': teams })
     else:
         return leagues(request)
 
@@ -41,7 +41,7 @@ def leagues(request):
 
 def draft(request, id=None):
     league = League.objects.get(id=id)
-    if league.public or league in request.user.leagues.all() or league.commish == request.user:
+    if league.public or league in request.user.teams.all() or league.commish == request.user:
         if league.commish == request.user:
             request.user.is_commish = True
         return render(request, 'drafter/league/draft.html', { 'league': league })

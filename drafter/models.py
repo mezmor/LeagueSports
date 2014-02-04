@@ -6,7 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class User(AbstractUser):
     def in_league(self, league):
-        return league in self.leagues.all()
+        return league in self.teams.all()
     
     def is_commish(self, league):
         return league in self.managed_leagues.all()
@@ -24,7 +24,7 @@ class League(models.Model):
     size = models.PositiveIntegerField(default = 12, validators=[MinValueValidator(2), MaxValueValidator(32)])
     
     commish = models.ForeignKey(User, related_name='managed_leagues')
-    teams = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
+    teams = models.ManyToManyField(User, related_name='teams', blank=True, through='FantasyTeam')
     
     def __unicode__(self):
         return self.name
@@ -32,16 +32,17 @@ class League(models.Model):
 class FantasyTeam(models.Model):
     manager = models.ForeignKey(User)
     league = models.ForeignKey(League)
-    name = models.CharField(max_length=20, blank=True)
+    name = models.CharField(max_length=32, default="The Bedazzling Defaults")
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
     ties = models.PositiveIntegerField(default=0)
+    draft_pick = models.PositiveIntegerField(null=True)
     
     class Meta:
         unique_together = (('manager', 'league'), )
         
     def __unicode__(self):
-        return (self.manager, self.league)
+        return self.name
 
 class Team(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
