@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block left_content %}
+    {% if user.draftable %}
+        <a href="{% url 'drafter.views.draft' league.id %}"><button type="button" class="btn btn-default">Draft</button></a>
+    {% endif %}
 {% endblock %}
 {% block center_content %}
     <div class="table-responsive">
@@ -33,7 +36,8 @@
     </div>
 {% endblock %}
 {% block right_content %}
-    {% if user.is_commish %}
+    {% if user.commish %}
         <!-- Commish panel -->
+        <p>Commish!</p>
     {% endif %}
 {% endblock %}

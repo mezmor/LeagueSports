@@ -5,6 +5,15 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Models
 
 class User(AbstractUser):
+    def in_league(self, league):
+        return league in self.leagues.all()
+    
+    def is_commish(self, league):
+        return league in self.managed_leagues.all()
+    
+    def is_draftable(self, league):
+        return self.in_league(league) or self.is_commish(league)
+    
     class Meta:
         unique_together = (('username', 'email'), )
  
@@ -16,7 +25,6 @@ class League(models.Model):
     
     commish = models.ForeignKey(User, related_name='managed_leagues')
     users = models.ManyToManyField(User, related_name='leagues', blank=True)
-    
     
     def __unicode__(self):
         return self.name

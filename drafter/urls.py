@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^leagues/$', views.leagues),
     url(r'^leagues/new/$', views.new_league),
     url(r'^leagues/(?P<id>\d+)/$', views.league),
+    url(r'^leagues/(?P<id>\d+)/draft$', views.draft),
 )
