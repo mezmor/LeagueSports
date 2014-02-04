@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from drafter.forms import LeagueForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
-from drafter.models import League, User
+from drafter.models import League, User, FantasyTeam
 
 
 def index(request):
@@ -15,7 +15,9 @@ def new_league(request):
             new_league = form.save(commit=False)
             new_league.commish = request.user
             new_league.save()
-            new_league.users.add(request.user)
+            #new_league.users.add(request.user)
+            new_team = FantasyTeam(manager=request.user, league=new_league)
+            new_team.save()
             return league(request, new_league.id)
     else:
         form = LeagueForm() # Unbound form

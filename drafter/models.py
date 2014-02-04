@@ -16,7 +16,7 @@ class User(AbstractUser):
     
     class Meta:
         unique_together = (('username', 'email'), )
- 
+
 class League(models.Model):
     name = models.CharField(max_length=64, blank=False)
     public = models.BooleanField(default=False)
@@ -24,7 +24,7 @@ class League(models.Model):
     size = models.PositiveIntegerField(default = 12, validators=[MinValueValidator(2), MaxValueValidator(32)])
     
     commish = models.ForeignKey(User, related_name='managed_leagues')
-    users = models.ManyToManyField(User, related_name='leagues', blank=True)
+    teams = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
     
     def __unicode__(self):
         return self.name
@@ -32,7 +32,7 @@ class League(models.Model):
 class FantasyTeam(models.Model):
     manager = models.ForeignKey(User)
     league = models.ForeignKey(League)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, blank=True)
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
     ties = models.PositiveIntegerField(default=0)
