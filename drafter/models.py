@@ -44,6 +44,10 @@ class FantasyTeam(models.Model):
     def __unicode__(self):
         return self.name
 
+
+"""
+Models for real players
+"""
 class Team(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     

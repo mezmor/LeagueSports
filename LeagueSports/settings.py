@@ -163,4 +163,5 @@ LOGGING = {
 }
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 AUTH_USER_MODEL = 'drafter.User'
