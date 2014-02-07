@@ -55,7 +55,7 @@ def leagues(request):
 """
 View the draft management page
 """
-@login_required(login_url="/")
+@login_required
 def draft(request, id=None):
     league = League.objects.get(id=id)
     if league.public or league in request.user.teams.all() or league.commish == request.user:
