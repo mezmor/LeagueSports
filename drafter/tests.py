@@ -53,7 +53,6 @@ class DrafterViewsTestCase(TestCase):
     """
     def test_league_creation(self):
         response = self.client.get(reverse('drafter.views.new_league'))
-#         self.assertEqual(response.status_code, 404, "Status code not 404, was: " + str(response.status_code))
         # Target url = www.site.com/?next=/leagues/new/, determined by reverse look-up
         self.assertRedirects(response, reverse('drafter.views.index')+'?next='+reverse('drafter.views.new_league'));
         self.assertTrue(self.client.login(username='testUser', password='test1234'))

@@ -9,6 +9,45 @@ def index(request):
     return render(request, 'drafter/index.html')
 
 """
+User-related views
+"""
+"""
+Create a new user
+"""
+def new_user(request):
+    if request.method == 'POST': # If the form was submitted...
+        form = UserCreationForm(request.POST) # Make a form bound to the POST data
+        if form.is_valid():
+            new_user = form.save()
+            username = request.POST['username']
+            password = request.POST['password1']
+            new_user = authenticate(username=username, password=password)
+            login(request, new_user)
+            return user(request, id=new_user.id) # TODO: make this a redirect
+    else:
+        form = UserCreationForm() # Unbound form
+    
+    return render(request, 'drafter/user/new.html', { 'form': form })    
+
+"""
+View a specific user
+"""
+def user(request, id=None, username=None): # id=None, nick=None, for nick in url?
+    if id:
+        user = User.objects.get(id=id)
+    else:
+        user = User.objects.get(username=username)
+    return render(request, 'drafter/user/user.html', { 'user': user })
+"""
+View all users
+"""
+def users(request):
+    users = list(User.objects.all())
+    return render(request, 'drafter/user/users.html', { 'users': users })
+
+
+
+"""
 League-related views
 """
 """
@@ -64,42 +103,4 @@ def draft(request, id=None):
         return render(request, 'drafter/league/draft.html', { 'league': league })
     else:
         return leagues(request)
-
-"""
-User-related views
-"""
-"""
-Create a new user
-"""
-def new_user(request):
-    if request.method == 'POST': # If the form was submitted...
-        form = UserCreationForm(request.POST) # Make a form bound to the POST data
-        if form.is_valid():
-            new_user = form.save()
-            username = request.POST['username']
-            password = request.POST['password1']
-            new_user = authenticate(username=username, password=password)
-            login(request, new_user)
-            return user(request, id=new_user.id) # TODO: make this a redirect
-    else:
-        form = UserCreationForm() # Unbound form
-    
-    return render(request, 'drafter/user/new.html', { 'form': form })    
-
-"""
-View a specific user
-"""
-def user(request, id=None, username=None): # id=None, nick=None, for nick in url?
-    if id:
-        user = User.objects.get(id=id)
-    else:
-        user = User.objects.get(username=username)
-    return render(request, 'drafter/user/user.html', { 'user': user })
-"""
-View all users
-"""
-def users(request):
-    users = list(User.objects.all())
-    return render(request, 'drafter/user/users.html', { 'users': users })
-
 
