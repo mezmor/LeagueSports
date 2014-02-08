@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from drafter.forms import LeagueForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from drafter.models import League, User, FantasyTeam
+from django.core.urlresolvers import reverse
 
 
 def index(request):
@@ -23,7 +24,7 @@ def new_user(request):
             password = request.POST['password1']
             new_user = authenticate(username=username, password=password)
             login(request, new_user)
-            return user(request, id=new_user.id) # TODO: make this a redirect
+            return redirect(reverse('drafter.views.user', kwargs={ 'id': new_user.id })) # user(request, id=new_user.id) # TODO: make this a redirect
     else:
         form = UserCreationForm() # Unbound form
     

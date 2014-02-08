@@ -20,16 +20,20 @@ class DrafterViewsTestCase(TestCase):
         
     """
     Test user creation view
+    Test that a form is provided by the response
+    Test that a UserCreationForm can be correctly instantiated
+    Test that posting a form will create the user and redirect us to their detail view
     """
     def test_user_creation(self):
+        test_user_data = {'username': "test", 'password1': "test1234", 'password2': "test1234"}
         response = self.client.get(reverse('drafter.views.new_user'))
         self.assertTrue('form' in response.context)
-        form = UserCreationForm(data = {'username': "test", 'password1': "test1234", 'password2': "test1234"})
+        form = UserCreationForm(data = test_user_data)
         self.assertTrue(form.is_valid())
         form.cleaned_data['csrfmiddlewaretoken'] = [self.client.cookies['csrftoken'].value]
         response = self.client.post(reverse('drafter.views.new_user'), form.cleaned_data)
-        self.assertEqual(response.status_code, 200, "Status code not OK (200): " + str(response.status_code))
-        #self.assertRedirects(response, reverse('drafter.views.users'))
+        test_user_obj = User.objects.get(username=test_user_data['username'])
+        self.assertRedirects(response, reverse('drafter.views.user', kwargs={'id': test_user_obj.id }))
         pass
     """
     Test user detail view
