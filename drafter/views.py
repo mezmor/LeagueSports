@@ -71,6 +71,7 @@ def new_league(request):
 
 """
 View a specific league
+not called atm
 """
 def league(request, id):
     league = League.objects.get(id=id)

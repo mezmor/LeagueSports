@@ -9,13 +9,13 @@
 {% endblock %}
 {% block center_content %}
     <ul class="nav nav-pills">
-        <li><a id="standings" href="{% url 'drafter.views.league_standings' league.id %}">Standings</a></li>
-        <li><a id="rosters" href="{% url 'drafter.views.league_rosters' league.id %}">Rosters</a></li>
-        <li><a id="scoring" href="{% url 'drafter.views.league_scoring' league.id %}">Scoring</a></li>
-        <li><a id="playoffs" href="{% url 'drafter.views.league_playoffs' league.id %}">Playoffs</a></li>
-        <li><a id="schedule" href="{% url 'drafter.views.league_schedule' league.id %}">Schedule</a></li>
+        <li><a id="standings-tab" href="{% url 'drafter.views.league_standings' league.id %}">Standings</a></li>
+        <li><a id="rosters-tab" href="{% url 'drafter.views.league_rosters' league.id %}">Rosters</a></li>
+        <li><a id="scoring-tab" href="{% url 'drafter.views.league_scoring' league.id %}">Scoring</a></li>
+        <li><a id="playoffs-tab" href="{% url 'drafter.views.league_playoffs' league.id %}">Playoffs</a></li>
+        <li><a id="schedule-tab" href="{% url 'drafter.views.league_schedule' league.id %}">Schedule</a></li>
         {% if user.may_draft %}
-            <li><a href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
+            <li><a id="draft-tab" href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
         {% endif %}
     </ul>
     <div class="table-responsive">
