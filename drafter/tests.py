@@ -36,13 +36,13 @@ class DrafterViewsTestCase(TestCase):
         form.cleaned_data['csrfmiddlewaretoken'] = [self.client.cookies['csrftoken'].value]
         response = self.client.post(reverse('drafter.views.new_user'), form.cleaned_data)
         test_user_obj = User.objects.get(username=test_user_data['username']) 
-        self.assertRedirects(response, reverse('drafter.views.user', kwargs={'id': test_user_obj.id }))
+        self.assertRedirects(response, reverse('drafter.views.user', kwargs={'user_id': test_user_obj.id }))
         
     """
     Test user detail view
     """
     def test_user_detail(self):
-        response = self.client.get(reverse('drafter.views.user', kwargs={'id': self.testUser.id }))
+        response = self.client.get(reverse('drafter.views.user', kwargs={'user_id': self.testUser.id }))
         self.assertEqual(response.status_code, 200, "Status code not OK (200): " + str(response.status_code))
     """
     Test user list view
@@ -74,14 +74,14 @@ class DrafterViewsTestCase(TestCase):
         form.cleaned_data['csrfmiddlewaretoken'] = [self.client.cookies['csrftoken'].value]
         response = self.client.post(reverse('drafter.views.new_league'), form.cleaned_data)
         test_league_obj = League.objects.get(name=test_league_data['name'])
-        self.assertRedirects(response, reverse('drafter.views.league', kwargs={'id': test_league_obj.id-1 }))
+        self.assertRedirects(response, reverse('drafter.views.league', kwargs={'league_id': test_league_obj.id-1 }), target_status_code=302)
         
     """
     Test league detail view
     """
     def test_league_detail(self):
-        response = self.client.get(reverse('drafter.views.league', kwargs={'id': self.testLeague.id }))
-        self.assertEqual(response.status_code, 200, "Status code not OK (200)")
+        response = self.client.get(reverse('drafter.views.league', kwargs={'league_id': self.testLeague.id }))
+        self.assertRedirects(response, reverse('drafter.views.league_standings', kwargs={'league_id': self.testLeague.id }))
     """
     Test league list view
     """

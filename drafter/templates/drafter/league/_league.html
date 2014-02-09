@@ -2,43 +2,28 @@
 {% block title %}LeagueSports - League Details{% endblock %}
 
 {% block center_banner %}
-
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">League</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="#">Players</a></li>
+        <li><a href="#">Scores</a></li>
+        <li><a href="#">Transactions</a></li>
+    </ul>
 {% endblock %}
 
 {% block left_content %}
 {% endblock %}
+
 {% block center_content %}
     <ul class="nav nav-pills">
-        <li><a id="standings-tab" href="{% url 'drafter.views.league_standings' league.id %}">Standings</a></li>
-        <li><a id="rosters-tab" href="{% url 'drafter.views.league_rosters' league.id %}">Rosters</a></li>
-        <li><a id="scoring-tab" href="{% url 'drafter.views.league_scoring' league.id %}">Scoring</a></li>
-        <li><a id="playoffs-tab" href="{% url 'drafter.views.league_playoffs' league.id %}">Playoffs</a></li>
-        <li><a id="schedule-tab" href="{% url 'drafter.views.league_schedule' league.id %}">Schedule</a></li>
+        <li id="standings-tab"><a href="{% url 'drafter.views.league_standings' league.id %}">Standings</a></li>
+        <li id="rosters-tab"><a href="{% url 'drafter.views.league_rosters' league.id %}">Rosters</a></li>
+        <li id="scoring-tab"><a href="{% url 'drafter.views.league_scoring' league.id %}">Scoring</a></li>
+        <li id="playoffs-tab"><a href="{% url 'drafter.views.league_playoffs' league.id %}">Playoffs</a></li>
+        <li id="schedule-tab"><a href="{% url 'drafter.views.league_schedule' league.id %}">Schedule</a></li>
         {% if user.may_draft %}
             <li><a id="draft-tab" href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
         {% endif %}
     </ul>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>League id</th>
-                    <th>League name</th>
-                    <th>Size</th>
-                    <th>Commish</th>
-                    <th>Teams</th>
-                </tr>
-            </thead>
-            
-            <tbody>
-	            <tr>
-	                <td>{{ league.id }}</td>
-	                <td>{{ league.name }}</td>
-	                <td>{{ league.size }}</td>
-	                <td>{{ league.commish }}</td>
-	                <td>{{ teams }}</td>
-	            </tr>
-            </tbody>
-        </table>
-    </div>
+    {% block league_content %}{% endblock %}
 {% endblock %}

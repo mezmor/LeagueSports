@@ -1,16 +1,33 @@
 {% extends 'drafter/league/_league.html' %}
-{% block title %}LeagueSports - Draft Management{% endblock %}
-
-{% block center_banner %}
-
-{% endblock %}
+{% block title %}LeagueSports - League Scoring{% endblock %}
 
 {% block left_content %}
 {% endblock %}
-{% block center_content %}
+{% block league_content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>League id</th>
+                    <th>League name</th>
+                    <th>Size</th>
+                    <th>Commish</th>
+                    <th>Teams</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr>
+                    <td>{{ league.id }}</td>
+                    <td>{{ league.name }}</td>
+                    <td>{{ league.size }}</td>
+                    <td>{{ league.commish }}</td>
+                    <td>{{ teams }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <script>
-    
+    $('#scoring-tab').addClass('active');
     </script>
-{% endblock %}
-{% block right_content %}
 {% endblock %}
