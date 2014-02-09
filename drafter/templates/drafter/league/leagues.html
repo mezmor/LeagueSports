@@ -25,18 +25,18 @@
 		                <th>League Name</th>
 		                <th>Size</th>
 		                <th>Commish</th>
+		                <th>Priv</th>
 	                </tr>
 	            </thead>
 	            
 	            <tbody>
 	                {% for league in all_leagues %}
-	                    {% if league.public %}
-			                <tr>
-			                    <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
-			                    <td>{{ league.size }}</td>
-			                    <td>{{ league.commish }}</td>
-			                </tr>
-	                    {% endif %}
+		                <tr>
+		                    <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
+		                    <td>{{ league.size }}</td>
+		                    <td>{{ league.commish }}</td>
+		                    <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
+		                </tr>
 	                {% endfor %}
 	            </tbody>
 	        </table>
@@ -50,6 +50,7 @@
 	                        <th>League Name</th>
 	                        <th>Size</th>
 	                        <th>Commish</th>
+	                        <th>Priv.</th>
 	                    </tr>
 	                </thead>
 	                
@@ -59,6 +60,7 @@
                                 <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
                                 <td>{{ league.size }}</td>
                                 <td>{{ league.commish }}</td>
+                                <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
                             </tr>
 	                    {% endfor %}
 	                </tbody>
@@ -72,6 +74,7 @@
 	                        <th>League Name</th>
 	                        <th>Size</th>
 	                        <th>Commish</th>
+	                        <th>Priv.</th>
 	                    </tr>
 	                </thead>
 	                
@@ -81,6 +84,7 @@
                                 <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
                                 <td>{{ league.size }}</td>
                                 <td>{{ league.commish }}</td>
+                                <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
                             </tr>
 	                    {% endfor %}
 	                </tbody>
