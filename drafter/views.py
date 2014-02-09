@@ -38,7 +38,7 @@ def user(request, id=None, username=None): # id=None, nick=None, for nick in url
         user = User.objects.get(id=id)
     else:
         user = User.objects.get(username=username)
-    return render(request, 'drafter/user/user.html', { 'user': user })
+    return render(request, 'drafter/user/user.html', { 'viewed_user': user })
 """
 View all users
 """
@@ -79,7 +79,7 @@ def league(request, id):
             if request.user.is_commish(league):
                 request.user.commish = True
             if request.user.may_enter_draft(league):
-                request.user.draftable = True
+                request.user.may_draft = True
         teams = FantasyTeam.objects.filter(league=league)
         return render(request, 'drafter/league/league.html', { 'league': league, 'teams': teams })
     else:
@@ -93,18 +93,49 @@ def leagues(request):
     if request.user.is_authenticated():
         my_leagues = list(request.user.leagues.all())
         commish_leagues = list(request.user.managed_leagues.all())
+    else:
+        my_leagues = None
+        commish_leagues = None
     return render(request, 'drafter/league/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
 
 """
-View the draft management page
+View a league's draft management page
 """
 @login_required
-def draft(request, id=None):
+def league_draft(request, id=None):
     league = League.objects.get(id=id)
     if league.public or league in request.user.leagues.all() or league.commish == request.user:
         if league.commish == request.user:
             request.user.is_commish = True
-        return render(request, 'drafter/league/draft.html', { 'league': league })
+        return render(request, 'drafter/league/details/draft.html', { 'league': league })
     else:
         return leagues(request)
+    
+"""
+View a league's standings
+"""
+def league_standings(request):
+    return render(request, 'drafter/league/details/standings.html')
 
+"""
+View a league's rosters
+"""
+def league_rosters(request):
+    return render(request, 'drafter/league/details/rosters.html')
+    
+"""
+View a league's scoring rules
+"""
+def league_scoring(request):
+    return render(request, 'drafter/league/details/scoring.html')
+"""
+View a league's playoff bracket
+"""
+def league_playoffs(request):
+    return render(request, 'drafter/league/details/playoffs.html')
+
+"""
+View a league's schedule
+"""
+def league_schedule(request):
+    return render(request, 'drafter/league/details/schedule.html')
