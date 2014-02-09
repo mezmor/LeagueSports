@@ -24,7 +24,7 @@ def new_user(request):
             password = request.POST['password1']
             new_user = authenticate(username=username, password=password)
             login(request, new_user)
-            return redirect(reverse('drafter.views.user', kwargs={ 'id': new_user.id })) # user(request, id=new_user.id) # TODO: make this a redirect
+            return redirect(reverse('drafter.views.user', kwargs={ 'id': new_user.id })) 
     else:
         form = UserCreationForm() # Unbound form
     
@@ -64,7 +64,7 @@ def new_league(request):
             new_league.save()
             new_team = FantasyTeam(manager=request.user, league=new_league)
             new_team.save()
-            return league(request, new_league.id) # TODO: make this a redirect
+            return redirect(reverse('drafter.views.league', kwargs={ 'id': new_team.id })) 
     else:
         form = LeagueForm() # Unbound form
     return render(request, 'drafter/league/new.html', { 'form': form })
@@ -89,8 +89,11 @@ def league(request, id):
 View all leagues
 """
 def leagues(request):
-    leagues = list(League.objects.all())
-    return render(request, 'drafter/league/leagues.html', { 'leagues': leagues })
+    all_leagues = list(League.objects.all())
+    if request.user.is_authenticated():
+        my_leagues = list(request.user.teams.all())
+        commish_leagues = list(request.user.managed_leagues.all())
+    return render(request, 'drafter/league/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
 
 """
 View the draft management page
