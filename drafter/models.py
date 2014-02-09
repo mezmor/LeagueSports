@@ -6,12 +6,12 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class User(AbstractUser):
     def in_league(self, league):
-        return league in self.teams.all()
+        return league in self.leagues.all()
     
     def is_commish(self, league):
         return league in self.managed_leagues.all()
     
-    def is_draftable(self, league):
+    def may_enter_draft(self, league):
         return self.in_league(league) or self.is_commish(league)
     
     class Meta:
@@ -24,7 +24,7 @@ class League(models.Model):
     size = models.PositiveIntegerField(default = 12, validators=[MinValueValidator(2), MaxValueValidator(32)])
     
     commish = models.ForeignKey(User, related_name='managed_leagues')
-    teams = models.ManyToManyField(User, related_name='teams', blank=True, through='FantasyTeam')
+    leagues = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
     
     def __unicode__(self):
         return self.name

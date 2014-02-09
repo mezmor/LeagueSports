@@ -2,9 +2,6 @@
 {% block title %}LeagueSports - League List{% endblock %}
 
 {% block center_banner %}
-{% if user.is_authenticated %}
-    <a href="{% url 'drafter.views.new_league' %}"><button type="button" class="btn btn-default">New League</button></a>
-{% endif %}
 {% endblock %}
 
 {% block left_content %}
@@ -15,6 +12,7 @@
         {% if user.is_authenticated %}
             <li><a href="#my-leagues" data-troggle="tab">My Leagues</a></li>
             <li><a href="#commish-leagues" data-troggle="tab">Commish Leagues</a></li>
+            <li><a id="new_league" class="btn-success" href="{% url 'drafter.views.new_league' %}">New League</a></li>
         {% endif %}
     </ul>
     <div class="tab-content">
@@ -94,8 +92,10 @@
     </div>
     <script>
 	$('#leagues-tabs a').click(function (e) {
-	    e.preventDefault()
-	    $(this).tab('show')
+		if(e.target.id != 'new_league'){
+			e.preventDefault()
+	        $(this).tab('show')
+		}
 	});
 	</script>
 {% endblock %}

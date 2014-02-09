@@ -74,11 +74,11 @@ View a specific league
 """
 def league(request, id):
     league = League.objects.get(id=id)
-    if league.public or request.user.is_draftable(league):
+    if league.public or request.user.may_enter_draft(league):
         if request.user.is_authenticated():
             if request.user.is_commish(league):
                 request.user.commish = True
-            if request.user.is_draftable(league):
+            if request.user.may_enter_draft(league):
                 request.user.draftable = True
         teams = FantasyTeam.objects.filter(league=league)
         return render(request, 'drafter/league/league.html', { 'league': league, 'teams': teams })
@@ -91,7 +91,7 @@ View all leagues
 def leagues(request):
     all_leagues = list(League.objects.all())
     if request.user.is_authenticated():
-        my_leagues = list(request.user.teams.all())
+        my_leagues = list(request.user.leagues.all())
         commish_leagues = list(request.user.managed_leagues.all())
     return render(request, 'drafter/league/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
 
@@ -101,7 +101,7 @@ View the draft management page
 @login_required
 def draft(request, id=None):
     league = League.objects.get(id=id)
-    if league.public or league in request.user.teams.all() or league.commish == request.user:
+    if league.public or league in request.user.leagues.all() or league.commish == request.user:
         if league.commish == request.user:
             request.user.is_commish = True
         return render(request, 'drafter/league/draft.html', { 'league': league })
