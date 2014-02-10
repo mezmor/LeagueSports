@@ -1,0 +1,17 @@
+{% extends 'drafter/leagues/details/_settings.html' %}
+{% block title %}LeagueSports - League Settings Panel{% endblock %}
+
+{% block left_content %}
+{% endblock %}
+{% block league_content %}
+    {{ form.errors }}
+    <form action="{% url 'drafter.views.league_settings' league.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+    <script>
+    $('#leagues-guide').addClass('active');
+    $('#settings-tab').addClass('active');
+    </script>
+{% endblock %}

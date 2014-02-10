@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from drafter.forms import LeagueForm, UserCreationForm
+from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from drafter.models import League, User, FantasyTeam
@@ -57,7 +57,7 @@ Create a new league
 @login_required
 def new_league(request):
     if request.method == 'POST': # If the form was submitted...
-        form = LeagueForm(request.POST) # Make a form bound to the POST data
+        form = LeagueCreationForm(request.POST) # Make a form bound to the POST data
         if form.is_valid():
             new_league = form.save(commit=False)
             new_league.commish = request.user
@@ -66,7 +66,7 @@ def new_league(request):
             new_team.save()
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_team.id })) 
     else:
-        form = LeagueForm() # Unbound form
+        form = LeagueCreationForm() # Unbound form
     return render(request, 'drafter/leagues/new.html', { 'form': form })
 
 """
@@ -129,9 +129,29 @@ View a league's commish panel
 def league_settings(request, league_id=None):
     league = League.objects.get(id=league_id)
     if league.commish == request.user:
-        return render(request, 'drafter/leagues/details/league/settings.html', { 'league': league })
+        if request.method == 'POST':
+            form = LeagueEditForm(request.POST, instance=league)
+            if form.is_valid():
+                form.save()
+        else:
+            form = LeagueEditForm(instance=league) 
+        return render(request, 'drafter/leagues/details/settings/settings.html', { 'league': league, 'form': form })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    
+"""
+if request.method == 'POST': # If the form was submitted...
+        form = LeagueCreationForm(request.POST) # Make a form bound to the POST data
+        if form.is_valid():
+            new_league = form.save(commit=False)
+            new_league.commish = request.user
+            new_league.save()
+            new_team = FantasyTeam(manager=request.user, league=new_league)
+            new_team.save()
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_team.id })) 
+    else:
+        form = LeagueCreationForm() # Unbound form
+"""
 """
 View all leagues
 """

@@ -48,7 +48,7 @@ Users should be able to see a list of all leagues (LIST VIEW)
     * league name, size, commish, privacy setting (private = must be accepted/invited to join)
     
 Users should be able to see details about leagues (DETAIL VIEW)
-    * Selector tabs: Standings, Rules, Scoring, Playoffs, Rosters, Leaders (Statistics), Draft
+    * Selector tabs: Standings, Rosters, Scoring, Playoffs, Draft, My Team
         
     
 #### Internal user-league interaction
@@ -80,8 +80,9 @@ Commish should be able to alter league settings:
                 * +20% of score for 0 deaths AND 10+ kda
                 * -20% of score for losing
     * Enable/disable playoff bracket
+        * Play the first 8 week schedule normally, then play 3 weeks of single-elimination bracket (DEFAULT)
         * Play the full 11 week schedule normally
-        * Play the first 8 week schedule normally, then play 3 weeks of single-elimination bracket
+
 
         
 When users join a league, they automatically create a default FantasyTeam within a league that they interact with

@@ -1,20 +1,5 @@
-{% extends 'drafter/_trifold.html' %}
-{% block title %}LeagueSports - League Details{% endblock %}
+{% extends 'drafter/leagues/details/__details.html' %}
 {% load drafter_extras %}
-
-{% block center_banner %}
-    <ul class="nav nav-tabs">
-        <li id="league-tab"><a href="{% url 'drafter.views.league' league.id %}">League</a></li>
-        <li id="team-tab" {% if not user|has_team:league %}class="disabled"{% endif %}><a href="#">Team</a></li>
-        <li id="players-tab" ><a href="#">Players</a></li>
-        <li id="scores-tab" ><a href="#">Scores</a></li>
-        <li id="transactions-tab" ><a href="#">Transactions</a></li>
-        {% if user|is_commish:league %}<li id="settings-tab"><a href="#">Commish Panel</a></li>{% endif %}
-    </ul>
-{% endblock %}
-
-{% block left_content %}
-{% endblock %}
 
 {% block center_content %}
     <ul class="nav nav-pills">

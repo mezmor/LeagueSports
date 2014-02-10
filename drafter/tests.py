@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from drafter.models import User, League
-from drafter.forms import UserCreationForm, LeagueForm
+from drafter.forms import UserCreationForm, LeagueCreationForm
 
 """
 Responses are HttpResponse objects, .status_code, .context, .templates, [<header_name>]
@@ -68,7 +68,7 @@ class DrafterViewsTestCase(TestCase):
         response = self.client.get(reverse('drafter.views.new_league'))
         self.assertTrue('form' in response.context)
         # TEst form fields
-        form = LeagueForm(data = test_league_data)
+        form = LeagueCreationForm(data = test_league_data)
         self.assertTrue(form.is_valid())
         # Test league creation via form post and redirect
         form.cleaned_data['csrfmiddlewaretoken'] = [self.client.cookies['csrftoken'].value]

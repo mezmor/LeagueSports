@@ -1,0 +1,9 @@
+{% extends 'drafter/leagues/details/__details.html' %}
+{% load drafter_extras %}
+
+{% block center_content %}
+    <ul class="nav nav-pills">
+        <li id="standings-tab" class="active"><a href="#">Main</a></li>
+    </ul>
+    {% block league_content %}{% endblock %}
+{% endblock %}
