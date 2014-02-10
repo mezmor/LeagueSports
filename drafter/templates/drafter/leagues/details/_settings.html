@@ -1,9 +1,9 @@
 {% extends 'drafter/leagues/details/__details.html' %}
-{% load drafter_extras %}
 
 {% block center_content %}
     <ul class="nav nav-pills">
-        <li id="standings-tab" class="active"><a href="#">Main</a></li>
+        <li id="main-tab"><a href="{% url 'drafter.views.league_settings' league.id %}">Main</a></li>
+        <li id="requests-tab"><a href="{% url 'drafter.views.league_requests' league.id %}">Requests</a></li>
     </ul>
     {% block league_content %}{% endblock %}
 {% endblock %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from drafter.models import League, User, FantasyTeam
+from drafter.models import League, User, FantasyTeam, Message
 from django.core.urlresolvers import reverse
 
 
@@ -138,7 +138,18 @@ def league_settings(request, league_id=None):
         return render(request, 'drafter/leagues/details/settings/settings.html', { 'league': league, 'form': form })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-    
+
+"""
+View a league's join requests
+"""
+@login_required
+def league_requests(request, league_id=None):
+    league = League.objects.get(id=league_id)
+    if league.commish == request.user:
+        requests = Message.objects.filter(request=True, target_league=league_id)
+        return render(request, 'drafter/leagues/details/settings/requests.html', { 'league': league, 'requests': requests })
+    else:
+        return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 """
 if request.method == 'POST': # If the form was submitted...
         form = LeagueCreationForm(request.POST) # Make a form bound to the POST data

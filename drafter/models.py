@@ -62,7 +62,15 @@ class FantasyTeam(models.Model):
         
     def __unicode__(self):
         return self.name
-
+    
+class Message(models.Model):
+    invite = models.BooleanField(default=False)
+    request = models.BooleanField(default=False)
+    sender = models.ForeignKey(User, related_name="sent_messages")
+    recipient = models.ForeignKey(User, related_name="received_messages")
+    target_league = models.ForeignKey(League, null=True, blank=False)
+    message = models.CharField(max_length = 256);
+    
 """
 Models for real players
 """
