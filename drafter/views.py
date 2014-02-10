@@ -70,7 +70,7 @@ def new_league(request):
     return render(request, 'drafter/league/new.html', { 'form': form })
 
 """
-View a specific league
+View a specific league's default tab (for now hardcoded to Standings)
 """
 def league(request, league_id=None):
     return redirect(reverse('drafter.views.league_standings', kwargs={ 'league_id': league_id })) 

@@ -24,7 +24,7 @@ class League(models.Model):
     size = models.PositiveIntegerField(default = 12, validators=[MinValueValidator(2), MaxValueValidator(32)])
     
     commish = models.ForeignKey(User, related_name='managed_leagues')
-    leagues = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
+    users = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
     
     def __unicode__(self):
         return self.name

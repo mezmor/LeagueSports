@@ -1,10 +1,11 @@
 {% extends 'drafter/_trifold.html' %}
 {% block title %}LeagueSports - League Details{% endblock %}
+{% load drafter_extras %}
 
 {% block center_banner %}
     <ul class="nav nav-tabs">
         <li class="active"><a href="#">League</a></li>
-        <li><a href="#">Team</a></li>
+        <li {% if not user|has_team:league %}class="disabled"{% endif %}><a href="#">Team</a></li>
         <li><a href="#">Players</a></li>
         <li><a href="#">Scores</a></li>
         <li><a href="#">Transactions</a></li>
