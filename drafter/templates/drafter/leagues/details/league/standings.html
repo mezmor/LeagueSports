@@ -1,5 +1,5 @@
-{% extends 'drafter/league/_league.html' %}
-{% block title %}LeagueSports - League Playoffs{% endblock %}
+{% extends 'drafter/leagues/_league.html' %}
+{% block title %}LeagueSports - League Standings{% endblock %}
 
 {% block left_content %}
 {% endblock %}
@@ -28,6 +28,8 @@
         </table>
     </div>
     <script>
-    $('#playoffs-tab').addClass('active');
+    $('#leagues-guide').addClass('active');
+    $('#league-tab').addClass('active');
+    $('#standings-tab').addClass('active');
     </script>
 {% endblock %}

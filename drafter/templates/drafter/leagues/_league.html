@@ -4,11 +4,12 @@
 
 {% block center_banner %}
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#">League</a></li>
-        <li {% if not user|has_team:league %}class="disabled"{% endif %}><a href="#">Team</a></li>
-        <li><a href="#">Players</a></li>
-        <li><a href="#">Scores</a></li>
-        <li><a href="#">Transactions</a></li>
+        <li id="league-tab"><a href="{% url 'drafter.views.league' league.id %}">League</a></li>
+        <li id="team-tab" {% if not user|has_team:league %}class="disabled"{% endif %}><a href="#">Team</a></li>
+        <li id="players-tab" ><a href="#">Players</a></li>
+        <li id="scores-tab" ><a href="#">Scores</a></li>
+        <li id="transactions-tab" ><a href="#">Transactions</a></li>
+        {% if user|is_commish:league %}<li id="settings-tab"><a href="#">Commish Panel</a></li>{% endif %}
     </ul>
 {% endblock %}
 
@@ -22,8 +23,8 @@
         <li id="scoring-tab"><a href="{% url 'drafter.views.league_scoring' league.id %}">Scoring</a></li>
         <li id="playoffs-tab"><a href="{% url 'drafter.views.league_playoffs' league.id %}">Playoffs</a></li>
         <li id="schedule-tab"><a href="{% url 'drafter.views.league_schedule' league.id %}">Schedule</a></li>
-        {% if user.may_draft %}
-            <li><a id="draft-tab" href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
+        {% if user|may_enter_draft:league %}
+            <li id="draft-tab"><a href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
         {% endif %}
     </ul>
     {% block league_content %}{% endblock %}

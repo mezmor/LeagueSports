@@ -5,14 +5,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Models
 
 class User(AbstractUser):
-    def in_league(self, league):
-        return league in self.leagues.all()
-    
-    def is_commish(self, league):
-        return league in self.managed_leagues.all()
-    
     def may_enter_draft(self, league):
-        return self.in_league(league) or self.is_commish(league)
+        return league in self.leagues.all() or league.commish == self
     
     class Meta:
         unique_together = (('username', 'email'), )

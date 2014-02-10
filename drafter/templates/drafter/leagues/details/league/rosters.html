@@ -1,4 +1,4 @@
-{% extends 'drafter/league/_league.html' %}
+{% extends 'drafter/leagues/_league.html' %}
 {% block title %}LeagueSports - League Rosters{% endblock %}
 
 {% block left_content %}
@@ -28,6 +28,8 @@
         </table>
     </div>
     <script>
+    $('#leagues-guide').addClass('active');
+    $('#league-tab').addClass('active');
     $('#rosters-tab').addClass('active');
     </script>
 {% endblock %}

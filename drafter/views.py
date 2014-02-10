@@ -28,7 +28,7 @@ def new_user(request):
     else:
         form = UserCreationForm() # Unbound form
     
-    return render(request, 'drafter/user/new.html', { 'form': form })    
+    return render(request, 'drafter/users/new.html', { 'form': form })    
 
 """
 View a specific user
@@ -38,13 +38,13 @@ def user(request, user_id=None, username=None): # id=None, nick=None, for nick i
         user = User.objects.get(id=user_id)
     else:
         user = User.objects.get(username=username)
-    return render(request, 'drafter/user/user.html', { 'viewed_user': user })
+    return render(request, 'drafter/users/user.html', { 'viewed_user': user })
 """
 View all users
 """
 def users(request):
     users = list(User.objects.all())
-    return render(request, 'drafter/user/users.html', { 'users': users })
+    return render(request, 'drafter/users/users.html', { 'users': users })
 
 
 
@@ -67,7 +67,7 @@ def new_league(request):
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_team.id })) 
     else:
         form = LeagueForm() # Unbound form
-    return render(request, 'drafter/league/new.html', { 'form': form })
+    return render(request, 'drafter/leagues/new.html', { 'form': form })
 
 """
 View a specific league's default tab (for now hardcoded to Standings)
@@ -75,28 +75,13 @@ View a specific league's default tab (for now hardcoded to Standings)
 def league(request, league_id=None):
     return redirect(reverse('drafter.views.league_standings', kwargs={ 'league_id': league_id })) 
 
-    # Previous code, will be split into separate pages
-    """
-    league = League.objects.get(id=league_id)
-    if league.public or request.user.may_enter_draft(league):
-        if request.user.is_authenticated():
-            if request.user.is_commish(league):
-                request.user.commish = True
-            if request.user.may_enter_draft(league):
-                request.user.may_draft = True
-        teams = FantasyTeam.objects.filter(league=league)
-        return render(request, 'drafter/league/league.html', { 'league': league, 'teams': teams })
-    else:
-        return leagues(request)
-    """
-    
 """
 View a league's standings
 """
 def league_standings(request, league_id=None):
     league = League.objects.get(id=league_id)
     teams = FantasyTeam.objects.filter(league=league)
-    return render(request, 'drafter/league/details/standings.html', { 'league': league, 'teams': teams })
+    return render(request, 'drafter/leagues/details/league/standings.html', { 'league': league, 'teams': teams })
 
 """
 View a league's rosters
@@ -104,27 +89,27 @@ View a league's rosters
 def league_rosters(request, league_id=None):
     league = League.objects.get(id=league_id)
     teams = FantasyTeam.objects.filter(league=league)
-    return render(request, 'drafter/league/details/rosters.html', { 'league': league, 'teams': teams })
+    return render(request, 'drafter/leagues/details/league/rosters.html', { 'league': league, 'teams': teams })
     
 """
 View a league's scoring rules
 """
 def league_scoring(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/league/details/scoring.html', { 'league': league })
+    return render(request, 'drafter/leagues/details/league/scoring.html', { 'league': league })
 """
 View a league's playoff bracket
 """
 def league_playoffs(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/league/details/playoffs.html', { 'league': league })
+    return render(request, 'drafter/leagues/details/league/playoffs.html', { 'league': league })
 
 """
 View a league's schedule
 """
 def league_schedule(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/league/details/schedule.html', { 'league': league })
+    return render(request, 'drafter/leagues/details/league/schedule.html', { 'league': league })
     
 """
 View a league's draft management page
@@ -132,13 +117,21 @@ View a league's draft management page
 @login_required
 def league_draft(request, league_id=None):
     league = League.objects.get(id=league_id)
-    if league.public or league in request.user.leagues.all() or league.commish == request.user:
-        if league.commish == request.user:
-            request.user.is_commish = True
-        return render(request, 'drafter/league/details/draft.html', { 'league': league })
+    if league in request.user.leagues.all() or league.commish == request.user:
+        return render(request, 'drafter/leagues/details/league/draft.html', { 'league': league })
     else:
-        return leagues(request)
+        return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
     
+"""
+View a league's commish panel
+"""
+@login_required
+def league_settings(request, league_id=None):
+    league = League.objects.get(id=league_id)
+    if league.commish == request.user:
+        return render(request, 'drafter/leagues/details/league/settings.html', { 'league': league })
+    else:
+        return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 """
 View all leagues
 """
@@ -150,7 +143,7 @@ def leagues(request):
     else:
         my_leagues = None
         commish_leagues = None
-    return render(request, 'drafter/league/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
+    return render(request, 'drafter/leagues/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
 
 
     

@@ -20,5 +20,6 @@ urlpatterns = patterns('',
     url(r'^leagues/(?P<league_id>\d+)/rosters/$', views.league_rosters),
     url(r'^leagues/(?P<league_id>\d+)/scoring/$', views.league_scoring),
     url(r'^leagues/(?P<league_id>\d+)/playoffs/$', views.league_playoffs),
-    url(r'^leagues/(?P<league_id>\d+)/schedule/$', views.league_schedule), 
+    url(r'^leagues/(?P<league_id>\d+)/schedule/$', views.league_schedule),
+    url(r'^leagues/(?P<league_id>\d+)/settings/$', views.league_settings),  
 )

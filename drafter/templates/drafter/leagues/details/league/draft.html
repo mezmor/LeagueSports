@@ -1,5 +1,5 @@
-{% extends 'drafter/league/_league.html' %}
-{% block title %}LeagueSports - League Schedule{% endblock %}
+{% extends 'drafter/leagues/_league.html' %}
+{% block title %}LeagueSports - League Draft Management{% endblock %}
 
 {% block left_content %}
 {% endblock %}
@@ -28,6 +28,8 @@
         </table>
     </div>
     <script>
-    $('#schedule-tab').addClass('active');
+    $('#leagues-guide').addClass('active');
+    $('#league-tab').addClass('active');
+    $('#draft-tab').addClass('active');
     </script>
 {% endblock %}
