@@ -6,3 +6,7 @@ body {
 .banner {
     height: 43px;
 }
+
+.info-pane input {
+	width: 100%;
+}

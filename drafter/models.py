@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import datetime, timedelta
 
 # Models
 
@@ -15,7 +16,7 @@ class League(models.Model):
     name = models.CharField(max_length=64, blank=False)
     public = models.BooleanField(default=False)
     size = models.PositiveIntegerField(default = 8, validators=[MinValueValidator(2), MaxValueValidator(32)])
-    draft_start = models.DateTimeField(null=True, blank=True)
+    draft_start = models.DateTimeField(blank=True, default=lambda: datetime.now()+timedelta(days=30))
     SEASONS = (('S4Sum', 'Season 4 Summer'),
                ('S4Spr', 'Season 4 Spring'),)
     season = models.CharField(max_length = 5, choices=SEASONS, default='S4Spr')
@@ -68,8 +69,9 @@ class Message(models.Model):
     request = models.BooleanField(default=False)
     sender = models.ForeignKey(User, related_name="sent_messages")
     recipient = models.ForeignKey(User, related_name="received_messages")
-    target_league = models.ForeignKey(League, null=True, blank=False)
-    message = models.CharField(max_length = 256);
+    target_league = models.ForeignKey(League, null=True, blank=True)
+    message = models.CharField(max_length = 256, blank=True)
+    new = models.BooleanField(default=True)
     
 """
 Models for real players

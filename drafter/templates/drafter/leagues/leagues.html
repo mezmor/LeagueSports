@@ -21,7 +21,7 @@
 	            <thead>
 	                <tr>
 		                <th>League Name</th>
-		                <th>Size</th>
+		                <th>Players</th>
 		                <th>Commish</th>
 		                <th>Priv</th>
 	                </tr>
@@ -31,7 +31,7 @@
 	                {% for league in all_leagues %}
 		                <tr>
 		                    <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
-		                    <td>{{ league.size }}</td>
+		                    <td>{{ league.users.count }}/{{ league.size }}</td>
 		                    <td>{{ league.commish }}</td>
 		                    <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
 		                </tr>
@@ -46,7 +46,7 @@
 	                <thead>
 	                    <tr>
 	                        <th>League Name</th>
-	                        <th>Size</th>
+	                        <th>Players</th>
 	                        <th>Commish</th>
 	                        <th>Priv.</th>
 	                    </tr>
@@ -56,7 +56,7 @@
 	                    {% for league in my_leagues %}
                             <tr>
                                 <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
-                                <td>{{ league.size }}</td>
+                                <td>{{ league.users.count }}/{{ league.size }}</td>
                                 <td>{{ league.commish }}</td>
                                 <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
                             </tr>
@@ -70,7 +70,7 @@
 	                <thead>
 	                    <tr>
 	                        <th>League Name</th>
-	                        <th>Size</th>
+	                        <th>Players</th>
 	                        <th>Commish</th>
 	                        <th>Priv.</th>
 	                    </tr>
@@ -80,7 +80,7 @@
 	                    {% for league in commish_leagues %}
                             <tr>
                                 <td><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></td>
-                                <td>{{ league.size }}</td>
+                                <td>{{ league.users.count }}/{{ league.size }}</td>
                                 <td>{{ league.commish }}</td>
                                 <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
                             </tr>

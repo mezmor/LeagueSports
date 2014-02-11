@@ -1,6 +1,60 @@
 {% extends 'drafter/leagues/details/__details.html' %}
 {% load drafter_extras %}
 
+{% block left_content %}
+    <div class="info-pane">
+	    <span id="countdown"></span>
+	    {% if user.is_authenticated and league.users.count < league.size and not user in league.users.all %}
+            {% if league|request_exists:user.id %}
+                <a class="btn btn-default" href="#">Request Submitted</a>
+            {% else %}
+	        <form action="{% url 'drafter.views.join_league' league.id %}" method="post">
+		        {% csrf_token %}
+		        {{ league|get_form:user.id }}
+		        {% if league.public %}
+		            <input class="btn btn-default" type="submit" value="Join"/>
+		        {% else %}
+		            <input class="btn btn-default" type="submit" value="Request to Join"/>
+		        {% endif %}
+	        </form>
+	        {% endif %}
+	    {% endif %}
+    </div>
+    <script>
+	     // set the date we're counting down to
+	    var target_date = new Date("{{ league.draft_start|date:'Y-m-d H:i' }}").getTime();
+	     
+	    // variables for time units
+	    var days, hours, minutes, seconds;
+	     
+	    // get tag element
+	    var countdown = document.getElementById("countdown");
+	    
+	    function setTime() {
+	    	// find the amount of "seconds" between now and target
+            var current_date = new Date().getTime();
+            var seconds_left = (target_date - current_date) / 1000;
+         
+            // do some time calculations
+            days = parseInt(seconds_left / 86400);
+            seconds_left = seconds_left % 86400;
+             
+            hours = parseInt(seconds_left / 3600);
+            seconds_left = seconds_left % 3600;
+             
+            minutes = parseInt(seconds_left / 60);
+            seconds = parseInt(seconds_left % 60);
+             
+            // format countdown string + set tag value
+            countdown.innerHTML = days + "d, " + hours + "h, "
+            + minutes + "m, " + seconds + "s";  
+	    };
+	    setTime();
+	     
+	    // update the tag with id "countdown" every 1 second
+	    setInterval(setTime, 1000);
+    </script>
+{% endblock %}
 {% block center_content %}
     <ul class="nav nav-pills">
         <li id="standings-tab"><a href="{% url 'drafter.views.league_standings' league.id %}">Standings</a></li>

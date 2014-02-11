@@ -1,5 +1,5 @@
-from django.forms import ModelForm, ValidationError
-from drafter.models import League, User
+from django.forms import ModelForm, ValidationError, ModelChoiceField, HiddenInput
+from drafter.models import League, User, Message
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -28,3 +28,11 @@ class UserCreationForm(UserCreationForm):
         except User.DoesNotExist:
             return username
         raise ValidationError(self.error_messages['duplicate_username']) 
+
+class RequestCreationForm(ModelForm):
+    sender = ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput())
+    recipient = ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput())
+    target_league= ModelChoiceField(queryset=League.objects.all(), widget=HiddenInput())
+    class Meta:
+        model= Message
+        fields = ('sender', 'recipient', 'target_league')

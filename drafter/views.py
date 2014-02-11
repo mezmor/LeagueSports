@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
-from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
+from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm, RequestCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from drafter.models import League, User, FantasyTeam, Message
@@ -62,9 +63,8 @@ def new_league(request):
             new_league = form.save(commit=False)
             new_league.commish = request.user
             new_league.save()
-            new_team = FantasyTeam(manager=request.user, league=new_league)
-            new_team.save()
-            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_team.id })) 
+            FantasyTeam.objects.create(manager=request.user, league=new_league)
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_league.id })) 
     else:
         form = LeagueCreationForm() # Unbound form
     return render(request, 'drafter/leagues/new.html', { 'form': form })
@@ -151,18 +151,28 @@ def league_requests(request, league_id=None):
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 """
-if request.method == 'POST': # If the form was submitted...
-        form = LeagueCreationForm(request.POST) # Make a form bound to the POST data
-        if form.is_valid():
-            new_league = form.save(commit=False)
-            new_league.commish = request.user
-            new_league.save()
-            new_team = FantasyTeam(manager=request.user, league=new_league)
-            new_team.save()
-            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_team.id })) 
-    else:
-        form = LeagueCreationForm() # Unbound form
+Join request
 """
+@login_required
+def join_league(request, league_id=None):
+    league = League.objects.get(id=league_id)
+    if request.method == 'POST':
+        # If the league is full we return:
+        if league.users.count() >= league.size:
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+        
+        # If the league is public, let the logged in user join
+        if league.public:
+            FantasyTeam.objects.create(manager=request.user, league=league)
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+        else:
+            # If the league is private, send a join request
+            form = RequestCreationForm(request.POST)
+            # REQUEST NOT = TRUE yet
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 """
 View all leagues
 """
