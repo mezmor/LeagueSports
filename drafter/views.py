@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
-from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm, RequestCreationForm
+from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from drafter.models import League, User, FantasyTeam, Message
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 
 def index(request):
@@ -167,12 +168,24 @@ def join_league(request, league_id=None):
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
         else:
             # If the league is private, send a join request
-            form = RequestCreationForm(request.POST)
-            # REQUEST NOT = TRUE yet
-            if form.is_valid():
-                form.save()
-                return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+            #message = reverse('drafter.views.add_user_to_league', kwargs={'league_id': league_id, 'user_id': request.user.id })
+            Message.objects.create(sender=User.objects.get(id=request.user.id), recipient=league.commish, target_league=league, request=True)
     return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+
+@login_required
+def add_user_to_league(request, league_id=None, user_id=None):
+    league = League.objects.get(id=league_id)
+    if not FantasyTeam.objects.filter(manager=user_id, league=league_id).count() == 0:
+        return redirect(reverse('drafter.views.league_requests', kwargs={ 'league_id': league_id }))
+    if not request.user == league.commish:
+        return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    if request.method == 'POST':
+        FantasyTeam.objects.create(manager=User.objects.get(id=user_id), league=league)
+        join_request = Message.objects.get(target_league=league, sender=user_id)
+        join_request.new = False
+        join_request.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 """
 View all leagues
 """

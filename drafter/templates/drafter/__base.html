@@ -41,7 +41,7 @@
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		        {% if user.is_authenticated %}
-		            <li><a href="{% url 'drafter.views.user' user.id %}">Me</a></li>
+		            <li><a href="{% url 'drafter.views.user' user.id %}">Me: {{ user.username }}</a></li>
                     <li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
                 {% else %}
 	                <form class="navbar-form form-inline" method="post" action="{% url 'django.contrib.auth.views.login' %}">

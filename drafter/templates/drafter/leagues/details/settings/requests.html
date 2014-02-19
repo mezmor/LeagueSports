@@ -1,4 +1,5 @@
 {% extends 'drafter/leagues/details/_settings.html' %}
+{% load drafter_extras %}
 {% block title %}LeagueSports - League Settings Panel{% endblock %}
 
 {% block left_content %}
@@ -11,18 +12,21 @@
                     <th>Sender</th>
                     <th>Recipient</th>
                     <th>Target</th>
-                    <th>Message</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             
             <tbody>
                 {% for request in requests %}
+                    {% if request.new %}
                     <tr>
                         <td>{{ request.sender }}</td>
                         <td>{{ request.recipient }}</td>
                         <td>{{ request.target_league }}</td>
-                        <td>{{ request.message }}</td>
+                        <!-- <td><a href="{{ request|accept_action }}">Add User</a> | <a href="{{ request|deny_action }}">Deny User</a></td> -->
+                        <td><form action="{% url 'drafter.views.add_user_to_league' league.id request.sender.id %}" method="post">{% csrf_token %}<input class="" type="submit" value="Add User"/></form></td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

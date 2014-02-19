@@ -1,6 +1,5 @@
-from drafter.models import FantasyTeam, User, Message, League
+from drafter.models import FantasyTeam, User, Message
 from django import template
-from drafter.forms import RequestCreationForm
 
 register = template.Library()
 
@@ -17,10 +16,17 @@ def is_commish(user, league):
     return league.commish == user
 
 @register.filter
-def get_form(league, user_id):
-    form = RequestCreationForm(initial = {'sender': User.objects.get(id=user_id), 'recipient': league.commish, 'target_league': league })
-    return form.as_p()
-
-@register.filter
 def request_exists(league, user_id):
     return 0 != Message.objects.filter(sender=User.objects.get(id=user_id), target_league=league).count()
+
+@register.filter
+def new_requests(league):
+    return Message.objects.filter(request=True, target_league=league, new=True).count()
+
+@register.filter
+def accept_action(request):
+    pass
+
+@register.filter
+def deny_action(request):
+    pass

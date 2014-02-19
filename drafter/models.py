@@ -62,7 +62,7 @@ class FantasyTeam(models.Model):
         unique_together = (('manager', 'league'), )
         
     def __unicode__(self):
-        return self.name
+        return self.name + ", " + self.manager.username
     
 class Message(models.Model):
     invite = models.BooleanField(default=False)

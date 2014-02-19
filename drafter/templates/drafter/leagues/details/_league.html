@@ -10,7 +10,6 @@
             {% else %}
 	        <form action="{% url 'drafter.views.join_league' league.id %}" method="post">
 		        {% csrf_token %}
-		        {{ league|get_form:user.id }}
 		        {% if league.public %}
 		            <input class="btn btn-default" type="submit" value="Join"/>
 		        {% else %}
