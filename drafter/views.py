@@ -186,6 +186,12 @@ def add_user_to_league(request, league_id=None, user_id=None):
         join_request.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+
+@login_required
+def del_request(request, league_id=None, user_id=None):
+    join_request = Message.objects.get(target_league=league, sender=user_id)
+    join_request.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 """
 View all leagues
 """

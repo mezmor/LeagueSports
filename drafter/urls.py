@@ -1,5 +1,4 @@
 from django.conf.urls import *
-from django.contrib.auth.views import AuthenticationForm 
 from drafter import views
 
 urlpatterns = patterns('',
@@ -21,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^leagues/(?P<league_id>\d+)/scoring/$', views.league_scoring),
     url(r'^leagues/(?P<league_id>\d+)/playoffs/$', views.league_playoffs),
     url(r'^leagues/(?P<league_id>\d+)/schedule/$', views.league_schedule),
+    
     
     url(r'^leagues/(?P<league_id>\d+)/join/$', views.join_league),
     url(r'^leagues/(?P<league_id>\d+)/add/(?P<user_id>\d+)$', views.add_user_to_league),
