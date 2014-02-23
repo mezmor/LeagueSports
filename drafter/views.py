@@ -144,10 +144,10 @@ def league_settings(request, league_id=None):
 View a league's join requests
 """
 @login_required
-def league_requests(request, league_id=None):
+def new_league_requests(request, league_id=None):
     league = League.objects.get(id=league_id)
     if league.commish == request.user:
-        requests = Message.objects.filter(request=True, target_league=league_id)
+        requests = Message.objects.filter(request=True, target_league=league_id, new=True)
         return render(request, 'drafter/leagues/details/settings/requests.html', { 'league': league, 'requests': requests })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
@@ -170,7 +170,8 @@ def join_league(request, league_id=None):
             # If the league is private, send a join request
             #message = reverse('drafter.views.add_user_to_league', kwargs={'league_id': league_id, 'user_id': request.user.id })
             Message.objects.create(sender=User.objects.get(id=request.user.id), recipient=league.commish, target_league=league, request=True)
-    return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    #return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def add_user_to_league(request, league_id=None, user_id=None):
@@ -186,12 +187,13 @@ def add_user_to_league(request, league_id=None, user_id=None):
         join_request.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-
 @login_required
-def del_request(request, league_id=None, user_id=None):
-    join_request = Message.objects.get(target_league=league, sender=user_id)
-    join_request.delete()
+def del_request(request, request_id=None):
+    join_request = Message.objects.get(id=request_id)
+    if request.user == join_request.recipient:
+        join_request.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 """
 View all leagues
 """

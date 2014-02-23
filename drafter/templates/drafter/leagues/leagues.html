@@ -29,6 +29,7 @@
 		                <th>Players</th>
 		                <th>Commish</th>
 		                <th>Priv</th>
+		                <th>Request Status</th>
 	                </tr>
 	            </thead>
 	            
@@ -39,6 +40,22 @@
 		                    <td>{{ league.users.count }}/{{ league.size }}</td>
 		                    <td>{{ league.commish }}</td>
 		                    <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
+		                    <td>
+		                    {% if user.is_authenticated and league.users.count < league.size and not user in league.users.all %}
+	                            {% if league|request_exists:user.id %}
+	                               <p>Request Submitted</p>
+	                            {% else %}
+	                                <form action="{% url 'drafter.views.join_league' league.id %}" method="post">
+	                                    {% csrf_token %}
+	                                    {% if league.public %}
+	                                        <input class="btn btn-default" type="submit" value="Join"/>
+	                                    {% else %}
+	                                        <input class="btn btn-default" type="submit" value="Request to Join"/>
+	                                    {% endif %}
+	                                </form>
+	                            {% endif %}
+                            {% endif %}
+		                    </td>
 		                </tr>
 	                {% endfor %}
 	            </tbody>
@@ -89,7 +106,7 @@
                                 <td>{{ league.users.count }}/{{ league.size }}</td>
                                 <td>{{ league.commish }}</td>
                                 <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
-                                <td><a href="{% url 'drafter.views.league_requests' league.id %}">{{ league|new_requests }}</a></td>
+                                <td><a href="{% url 'drafter.views.new_league_requests' league.id %}">{{ league|new_requests }}</a></td>
                             </tr>
 	                    {% endfor %}
 	                </tbody>
