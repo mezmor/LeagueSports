@@ -65,5 +65,8 @@
             <li id="draft-tab"><a href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
         {% endif %}
     </ul>
+    <script>
+    $('#league-tab').addClass('active');
+    </script>
     {% block league_content %}{% endblock %}
 {% endblock %}

@@ -15,6 +15,12 @@ def index(request):
 User-related views
 """
 """
+View all users
+"""
+def users(request):
+    users = list(User.objects.all())
+    return render(request, 'drafter/users/users.html', { 'users': users })
+"""
 Create a new user
 """
 def new_user(request):
@@ -41,18 +47,24 @@ def user(request, user_id=None, username=None): # id=None, nick=None, for nick i
     else:
         user = User.objects.get(username=username)
     return render(request, 'drafter/users/user.html', { 'viewed_user': user })
-"""
-View all users
-"""
-def users(request):
-    users = list(User.objects.all())
-    return render(request, 'drafter/users/users.html', { 'users': users })
-
 
 
 """
 League-related views
 """
+"""
+View all leagues
+"""
+def leagues(request):
+    all_leagues = list(League.objects.all())
+    if request.user.is_authenticated():
+        my_leagues = list(request.user.leagues.all())
+        commish_leagues = list(request.user.managed_leagues.all())
+    else:
+        my_leagues = None
+        commish_leagues = None
+    return render(request, 'drafter/leagues/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
+
 """
 Create a new league
 """
@@ -65,7 +77,7 @@ def new_league(request):
             new_league.commish = request.user
             new_league.save()
             FantasyTeam.objects.create(manager=request.user, league=new_league)
-            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_league.id })) 
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_league.id })) # TODO: redirect has implicit revers
     else:
         form = LeagueCreationForm() # Unbound form
     return render(request, 'drafter/leagues/new.html', { 'form': form })
@@ -139,7 +151,10 @@ def league_settings(request, league_id=None):
         return render(request, 'drafter/leagues/details/settings/settings.html', { 'league': league, 'form': form })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-
+    
+"""
+Request-related views
+"""
 """
 View a league's join requests
 """
@@ -151,6 +166,7 @@ def new_league_requests(request, league_id=None):
         return render(request, 'drafter/leagues/details/settings/requests.html', { 'league': league, 'requests': requests })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    
 """
 Join request
 """
@@ -168,11 +184,26 @@ def join_league(request, league_id=None):
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
         else:
             # If the league is private, send a join request
-            #message = reverse('drafter.views.add_user_to_league', kwargs={'league_id': league_id, 'user_id': request.user.id })
             Message.objects.create(sender=User.objects.get(id=request.user.id), recipient=league.commish, target_league=league, request=True)
     #return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+"""
+Delete the given join request
+"""
+@login_required
+def del_request(request, request_id=None):
+    join_request = Message.objects.get(id=request_id)
+    if request.user == join_request.recipient:
+        join_request.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+"""
+League interaction views
+"""
+"""
+Create a FantasyTeam with given league and user
+"""
 @login_required
 def add_user_to_league(request, league_id=None, user_id=None):
     league = League.objects.get(id=league_id)
@@ -185,27 +216,38 @@ def add_user_to_league(request, league_id=None, user_id=None):
         join_request = Message.objects.get(target_league=league, sender=user_id)
         join_request.new = False
         join_request.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-@login_required
-def del_request(request, request_id=None):
-    join_request = Message.objects.get(id=request_id)
-    if request.user == join_request.recipient:
-        join_request.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 """
-View all leagues
+Remove a user from the given league
 """
-def leagues(request):
-    all_leagues = list(League.objects.all())
-    if request.user.is_authenticated():
-        my_leagues = list(request.user.leagues.all())
-        commish_leagues = list(request.user.managed_leagues.all())
-    else:
-        my_leagues = None
-        commish_leagues = None
-    return render(request, 'drafter/leagues/leagues.html', { 'all_leagues': all_leagues, 'my_leagues': my_leagues, 'commish_leagues': commish_leagues })
+@login_required
+def del_user_from_league(request, league_id=None, user_id=None):
+    league = League.objects.get(id=league_id)
+    if request.user.id == user_id or request.user == league.commish:
+        team = FantasyTeam.objects.get(league=league, manager=user_id)
+        team.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+"""
+Team related views
+"""
+def team_roster(request, league_id=None, user_id=None):
+    team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
+    league = League.objects.get(id=league_id)
+    return render(request, 'drafter/leagues/details/team/roster.html', { 'team': team, 'league': league })
 
-    
+def team_schedule(request, league_id=None, user_id=None):
+    team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
+    league = League.objects.get(id=league_id)
+    return render(request, 'drafter/leagues/details/team/schedule.html', { 'team': team, 'league': league })
+
+def team_transactions(request, league_id=None, user_id=None):
+    team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
+    league = League.objects.get(id=league_id)
+    return render(request, 'drafter/leagues/details/team/transactions.html', { 'team': team, 'league': league })
+
+def team_picks(request, league_id=None, user_id=None):
+    team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
+    league = League.objects.get(id=league_id)
+    return render(request, 'drafter/leagues/details/team/picks.html', { 'team': team, 'league': league })

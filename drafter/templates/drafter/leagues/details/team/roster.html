@@ -1,5 +1,5 @@
-{% extends 'drafter/leagues/details/_league.html' %}
-{% block title %}LeagueSports - League Scoring{% endblock %}
+{% extends 'drafter/leagues/details/_team.html' %}
+{% block title %}LeagueSports - League Standings{% endblock %}
 
 {% block league_content %}
     <div class="table-responsive">
@@ -26,6 +26,6 @@
         </table>
     </div>
     <script>
-    $('#scoring-tab').addClass('active');
+    $('#roster-tab').addClass('active');
     </script>
 {% endblock %}

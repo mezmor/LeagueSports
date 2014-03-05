@@ -5,5 +5,8 @@
         <li id="main-tab"><a href="{% url 'drafter.views.league_settings' league.id %}">Main</a></li>
         <li id="requests-tab"><a href="{% url 'drafter.views.new_league_requests' league.id %}">Requests</a></li>
     </ul>
+    <script>
+    $('#settings-tab').addClass('active');
+    </script>
     {% block league_content %}{% endblock %}
 {% endblock %}

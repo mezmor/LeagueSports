@@ -119,4 +119,3 @@ Users should be able to join the draft after it has begun, but not after it has 
 Users should be able to see the time until the draft starts/if it is under way
 
     
-    

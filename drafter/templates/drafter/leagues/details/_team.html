@@ -1,0 +1,21 @@
+{% extends 'drafter/leagues/details/__details.html' %}
+{% load drafter_extras %}
+
+{% block left_content %}
+    <div class="info-pane">
+	   
+    </div>
+{% endblock %}
+{% block center_content %}
+    <ul class="nav nav-pills">
+        <li id="roster-tab"><a href="{% url 'drafter.views.team_roster' league.id user.id %}">Roster</a></li>
+        <li id="schedule-tab"><a href="{% url 'drafter.views.team_schedule' league.id user.id %}">Schedule</a></li>
+        <li id="team-transactions-tab"><a href="{% url 'drafter.views.team_transactions' league.id user.id %}">Transactions</a></li>
+        <li id="picks-tab"><a href="{% url 'drafter.views.team_picks' league.id user.id %}">Picks</a></li>
+    </ul>
+    <script>
+    $('#team-tab').addClass('active');
+    </script>
+    {% block league_content %}
+    {% endblock %}
+{% endblock %}

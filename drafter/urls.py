@@ -23,12 +23,16 @@ urlpatterns = patterns('',
     url(r'^leagues/(?P<league_id>\d+)/playoffs/$', views.league_playoffs),
     url(r'^leagues/(?P<league_id>\d+)/schedule/$', views.league_schedule),
     
-    # FantasyTeam URLs, user-league management
-    url(r'^leagues/(?P<league_id>\d+)/join/$', views.join_league),
-    url(r'^leagues/(?P<league_id>\d+)/add/(?P<user_id>\d+)$', views.add_user_to_league),
-    
     # Commish settings URLs
     url(r'^leagues/(?P<league_id>\d+)/settings/$', views.league_settings),
     url(r'^leagues/(?P<league_id>\d+)/settings/requests$', views.new_league_requests),
-    url(r'^requests/(?P<request_id>\d+)/del$', views.del_request)
+    url(r'^requests/(?P<request_id>\d+)/del$', views.del_request),
+    
+    # FantasyTeam URLs, user-league management
+    url(r'^leagues/(?P<league_id>\d+)/join/$', views.join_league),
+    url(r'^leagues/(?P<league_id>\d+)/add/(?P<user_id>\d+)$', views.add_user_to_league),
+    url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/roster$', views.team_roster),
+    url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/schedule$', views.team_schedule),
+    url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/transactions$', views.team_transactions),
+    url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/picks$', views.team_picks),
 )
