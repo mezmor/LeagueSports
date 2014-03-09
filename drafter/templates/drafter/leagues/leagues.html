@@ -106,7 +106,7 @@
                                 <td>{{ league.users.count }}/{{ league.size }}</td>
                                 <td>{{ league.commish }}</td>
                                 <td>{% if not league.public %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
-                                <td><a href="{% url 'drafter.views.new_league_requests' league.id %}">{{ league|new_requests }}</a></td>
+                                <td><a href="{% url 'drafter.views.new_join_requests' league.id %}">{{ league|new_requests }}</a></td>
                             </tr>
 	                    {% endfor %}
 	                </tbody>

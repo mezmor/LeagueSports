@@ -3,7 +3,12 @@
 
 {% block left_content %}
     <div class="info-pane">
-	   
+	    {% if user|has_team:league %}
+            <form action="{% url 'drafter.views.del_user_from_league' league.id team.manager.id %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-default" type="submit" value="Delete Team"/>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}
 {% block center_content %}

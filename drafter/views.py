@@ -159,8 +159,9 @@ Request-related views
 View a league's join requests
 """
 @login_required
-def new_league_requests(request, league_id=None):
+def new_join_requests(request, league_id=None):
     league = League.objects.get(id=league_id)
+    # Only a commish may see the new requests
     if league.commish == request.user:
         requests = Message.objects.filter(request=True, target_league=league_id, new=True)
         return render(request, 'drafter/leagues/details/settings/requests.html', { 'league': league, 'requests': requests })
@@ -172,12 +173,12 @@ Join request
 """
 @login_required
 def join_league(request, league_id=None):
-    league = League.objects.get(id=league_id)
+    # If the request was a post, hit the DB and do access checks
     if request.method == 'POST':
+        league = League.objects.get(id=league_id)
         # If the league is full we return:
         if league.users.count() >= league.size:
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-        
         # If the league is public, let the logged in user join
         if league.public:
             FantasyTeam.objects.create(manager=request.user, league=league)
@@ -185,7 +186,6 @@ def join_league(request, league_id=None):
         else:
             # If the league is private, send a join request
             Message.objects.create(sender=User.objects.get(id=request.user.id), recipient=league.commish, target_league=league, request=True)
-    #return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 """
@@ -206,19 +206,17 @@ Create a FantasyTeam with given league and user
 """
 @login_required
 def add_user_to_league(request, league_id=None, user_id=None):
-    league = League.objects.get(id=league_id)
-    # If there is already a team associated with this user, redirect
-    if not FantasyTeam.objects.filter(manager=user_id, league=league_id).count() == 0:
-        return redirect(reverse('drafter.views.league_requests', kwargs={ 'league_id': league_id }))
-    # If the user is not the league commish, they can not add a user to the league
-    if not request.user == league.commish:
-        return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-    # If the request is a POST we add the user and unset the new request bit
+    # If the request is a POST we hit the DB and do access checks
     if request.method == 'POST':
+        league = League.objects.get(id=league_id)
+        # If there is already a team associated with this user
+        # or if the requester is not the league commish, they can not add a user to the league, so redirect
+        if FantasyTeam.objects.filter(manager=user_id, league=league_id).count() > 0 or not request.user == league.commish:
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+        
         FantasyTeam.objects.create(manager=User.objects.get(id=user_id), league=league)
         join_request = Message.objects.get(target_league=league, sender=user_id)
-        join_request.new = False
-        join_request.save()
+        return redirect(reverse('drafter.views.del_request', kwargs={ 'request_id': join_request.id }))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 """
@@ -228,12 +226,17 @@ TODO: Instead of deleting the FantasyTeam, unset the manager and keep the team o
 """
 @login_required
 def del_user_from_league(request, league_id=None, user_id=None):
-    league = League.objects.get(id=league_id)
-    # Delete the FantasyTeam object if the requester is the user or the league commish
-    if request.user.id == user_id or request.user == league.commish:
-        team = FantasyTeam.objects.get(league=league, manager=user_id)
-        team.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    if request.method == 'POST':
+        league = League.objects.get(id=league_id)
+        # Try to get a team associated with the user and league
+        try:
+            team = FantasyTeam.objects.get(league=league, manager=user_id)
+        except FantasyTeam.DoesNotExist:
+            team = None
+        # Delete the FantasyTeam object if the requester is the user or the league commish and the team exists
+        if request.user.id == int(user_id) or request.user == league.commish and team is not None:
+            team.delete()
+    return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 
 """
 Team related views
