@@ -24,7 +24,7 @@ class League(models.Model):
                ('EU', 'Europe'),
                ('NAEU', 'North America & Europe'),               )
     region = models.CharField(max_length = 4, choices=REGIONS, default='NA')
-    transactions_per_time = models.PositiveIntegerField(default=3)
+    transactions_per_time_period = models.PositiveIntegerField(default=3)
     TIME_PERIODS = (('D', 'Daily'),
                     ('W', 'Weekly'))
     transaction_time_period = models.CharField(max_length=1, choices=TIME_PERIODS, default='W')

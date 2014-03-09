@@ -12,7 +12,7 @@ class LeagueEditForm(ModelForm):
     class Meta:
         model = League
         fields = ('name', 'public', 'size', 'draft_start', 'season', 'region', 
-                  'transactions_per_time', 'transaction_time_period', 'team_size', 
+                  'transactions_per_time_period', 'transaction_time_period', 'team_size', 
                   'commish', 'top_score', 'jungle_score', 'mid_score', 'ad_score', 'support_score', 
                   'per_game_losing_mod', 'per_game_godly_mod', 'season_length')
         
