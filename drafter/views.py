@@ -207,10 +207,13 @@ Create a FantasyTeam with given league and user
 @login_required
 def add_user_to_league(request, league_id=None, user_id=None):
     league = League.objects.get(id=league_id)
+    # If there is already a team associated with this user, redirect
     if not FantasyTeam.objects.filter(manager=user_id, league=league_id).count() == 0:
         return redirect(reverse('drafter.views.league_requests', kwargs={ 'league_id': league_id }))
+    # If the user is not the league commish, they can not add a user to the league
     if not request.user == league.commish:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    # If the request is a POST we add the user and unset the new request bit
     if request.method == 'POST':
         FantasyTeam.objects.create(manager=User.objects.get(id=user_id), league=league)
         join_request = Message.objects.get(target_league=league, sender=user_id)
@@ -220,10 +223,13 @@ def add_user_to_league(request, league_id=None, user_id=None):
 
 """
 Remove a user from the given league
+Currently deletes the FantasyTeam object assocated with the user and league
+TODO: Instead of deleting the FantasyTeam, unset the manager and keep the team object so as to reassign the manager
 """
 @login_required
 def del_user_from_league(request, league_id=None, user_id=None):
     league = League.objects.get(id=league_id)
+    # Delete the FantasyTeam object if the requester is the user or the league commish
     if request.user.id == user_id or request.user == league.commish:
         team = FantasyTeam.objects.get(league=league, manager=user_id)
         team.delete()
@@ -236,17 +242,23 @@ def team_roster(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
     return render(request, 'drafter/leagues/details/team/roster.html', { 'team': team, 'league': league })
-
+"""
+Team schedule
+"""
 def team_schedule(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
     return render(request, 'drafter/leagues/details/team/schedule.html', { 'team': team, 'league': league })
-
+"""
+Team transactions
+"""
 def team_transactions(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
     return render(request, 'drafter/leagues/details/team/transactions.html', { 'team': team, 'league': league })
-
+"""
+Team draft picks
+"""
 def team_picks(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
