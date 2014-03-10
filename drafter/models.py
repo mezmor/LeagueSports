@@ -18,6 +18,9 @@ class Team(models.Model):
 class Player(models.Model): 
     name = models.CharField(max_length=32, primary_key=True)
     team = models.ForeignKey(Team)
+    REGIONS = (('NA', 'North America'),
+               ('EU', 'Europe'),)
+    region = models.CharField(max_length = 2, choices=REGIONS)
     
     def __unicode__(self):
         return self.name
@@ -39,7 +42,7 @@ class League(models.Model):
     season = models.CharField(max_length = 5, choices=SEASONS, default='S4Spr')
     REGIONS = (('NA', 'North America'),
                ('EU', 'Europe'),
-               ('NAEU', 'North America & Europe'),               )
+               ('NAEU', 'North America & Europe'),)
     region = models.CharField(max_length = 4, choices=REGIONS, default='NA')
     transactions_per_time_period = models.PositiveIntegerField(default=3)
     TIME_PERIODS = (('D', 'Daily'),
