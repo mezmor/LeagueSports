@@ -21,7 +21,7 @@ class RawGameData(models.Model):
     
 class RawPlayerData(models.Model):
     game = models.ForeignKey(RawGameData, related_name='player_data')
-    player_name = models.CharField(max_length = 20)
+    player_name = models.CharField(max_length = 32)
     player_name.db_index = True
     team_color = models.CharField(max_length = 10)
     champion = models.CharField(max_length = 50)

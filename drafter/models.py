@@ -29,7 +29,7 @@ class League(models.Model):
                     ('W', 'Weekly'))
     transaction_time_period = models.CharField(max_length=1, choices=TIME_PERIODS, default='W')
     
-    team_size = models.PositiveIntegerField(default=5, validators=[MinValueValidator(5)])
+    team_size = models.PositiveIntegerField(default=7, validators=[MinValueValidator(5)])
     
     commish = models.ForeignKey(User, related_name='managed_leagues')
     users = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
@@ -58,11 +58,14 @@ class FantasyTeam(models.Model):
     draft_pick = models.PositiveIntegerField(null=True)
     locked = models.BooleanField(default=False)
     
+    
     class Meta:
         unique_together = (('manager', 'league'), )
         
     def __unicode__(self):
         return self.name + ", " + self.manager.username
+    
+    
     
 class Message(models.Model):
     invite = models.BooleanField(default=False)

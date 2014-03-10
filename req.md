@@ -147,7 +147,7 @@ As far as displaying the right content is concerned.
     - [ ] rosters.html
     - [ ] schedule.html
     - [ ] scoring.html
-    - [ ] standings.html
+    - [x] standings.html
     
 - [x] Settings (Commish Panel)
     - [x] requests.html
@@ -158,3 +158,4 @@ As far as displaying the right content is concerned.
     - [ ] roster.html
     - [ ] schedule.html
     - [ ] transactions.html
+    - [ ] settings.html
