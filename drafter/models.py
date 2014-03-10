@@ -107,9 +107,11 @@ Model for FantasyTeam's matches between each other
 class FantasyMatch(models.Model):
     teams = models.ManyToManyField(FantasyTeam)
     date = models.DateTimeField()
-    games = models.ManyToManyField(RawGameData)
+    games = models.ManyToManyField(RawGameData, null=True, blank=True)
     
     def clean(self):
         if self.teams.count() > 2:
             raise ValidationError('A FantasyMatch may not have more than two teams')
-    
+        if self.teams.count() == 2 and self.teams[0].league != self.teams[1].league:
+            raise ValidationError('Both FantasyTeam\'s must be in the same league')
+            
