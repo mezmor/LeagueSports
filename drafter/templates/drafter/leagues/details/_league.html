@@ -65,6 +65,10 @@
             <li id="draft-tab"><a href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
         {% endif %}
     </ul>
+    <ul class="breadcrumb">
+        <li><a href="{% url 'drafter.views.leagues' %}">Leagues</a></li>
+        <li class="active">{{ league.name }}</li>
+    </ul>
     <script>
     $('#league-tab').addClass('active');
     </script>

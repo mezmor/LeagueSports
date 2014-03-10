@@ -18,6 +18,11 @@
         <li id="team-transactions-tab"><a href="{% url 'drafter.views.team_transactions' league.id user.id %}">Transactions</a></li>
         <li id="picks-tab"><a href="{% url 'drafter.views.team_picks' league.id user.id %}">Picks</a></li>
     </ul>
+    <ul class="breadcrumb">
+        <li><a href="{% url 'drafter.views.leagues' %}">Leagues</a></li>
+        <li><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></li>
+        <li class="active">{{ team.name }}</li>
+    </ul>
     <script>
     $('#team-tab').addClass('active');
     </script>

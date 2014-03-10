@@ -10,3 +10,9 @@ body {
 .info-pane input {
 	width: 100%;
 }
+
+.breadcrumb {
+	margin-bottom: 0;
+	font-size: 12px;
+	height: 100%;
+}

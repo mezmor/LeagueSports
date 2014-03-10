@@ -3,22 +3,21 @@
 {% block title %}LeagueSports - League List{% endblock %}
 
 {% block center_banner %}
-    {% if user.is_authenticated %}
-	    <ul id="leagues-tabs" class="nav nav-pills">
-	       <li><a id="new_league" class="btn-success" href="{% url 'drafter.views.new_league' %}">New League</a></li>
-	    </ul>
-    {% endif %}
 {% endblock %}
 
 {% block left_content %}
 {% endblock %}
 {% block center_content %}
     <ul id="leagues-tabs" class="nav nav-pills">
+        <li><a id="new_league" class="btn-success" href="{% url 'drafter.views.new_league' %}">New League</a></li>
         <li class="active"><a href="#all-leagues" data-troggle="tab">All Leagues</a></li>
         {% if user.is_authenticated %}
             <li><a href="#my-leagues" data-troggle="tab">My Leagues</a></li>
             <li><a href="#commish-leagues" data-troggle="tab">Commish Leagues</a></li>
         {% endif %}
+    </ul>
+    <ul class="breadcrumb">
+    <li class="active">Leagues</li>
     </ul>
     <div class="tab-content">
 	    <div class="table-responsive tab-pane active" id="all-leagues">
