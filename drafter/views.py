@@ -93,7 +93,7 @@ View a league's standings
 """
 def league_standings(request, league_id=None):
     league = League.objects.get(id=league_id)
-    teams = FantasyTeam.objects.filter(league=league)
+    teams = [(a+1, b) for (a, b) in enumerate(FantasyTeam.objects.filter(league=league).order_by('wins'))]
     return render(request, 'drafter/leagues/details/league/standings.html', { 'league': league, 'teams': teams })
 
 """

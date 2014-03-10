@@ -6,6 +6,7 @@
         <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Team name</th>
                     <th>Team mngr</th>
                     <th>Wins</th>
@@ -15,8 +16,9 @@
             </thead>
             
             <tbody>
-                {% for team in teams|dictsort:"wins" %}
+                {% for index, team in teams %}
                 <tr>
+                    <td>{{ index }}/{{ league.size }}</td>
                     <td><a href="{% url 'drafter.views.team_roster' league.id team.manager.id %}">{{ team.name }}</a></td>
                     <td><a href="{% url 'drafter.views.user' team.manager.id %}">{{ team.manager }}</a></td>
                     <td>{{ team.wins }}</td>
