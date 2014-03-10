@@ -98,3 +98,5 @@ class Draft(models.Model):
     pick = models.PositiveIntegerField()
     team = models.ForeignKey(FantasyTeam)
     player = models.ForeignKey(Player)
+    
+    

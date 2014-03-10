@@ -9,7 +9,7 @@
 {% endblock %}
 {% block center_content %}
     <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Username</th>
@@ -22,7 +22,11 @@
                 <tr>
                     <td>{{ viewed_user.username }}</td>
                     <td>{{ viewed_user.date_joined }}</td>
-                    <td>{{ viewed_user.leagues.all }}</td>
+                    <td><div class="list-group">{% for league in viewed_user.leagues.all %}
+                            <a class="list-group-item" href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a>
+                        {% endfor %}
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

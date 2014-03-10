@@ -118,4 +118,43 @@ Users should be able to see the draft order with picks after the draft has ended
 Users should be able to join the draft after it has begun, but not after it has completed
 Users should be able to see the time until the draft starts/if it is under way
 
+Refactoring brainstorm
+=======================
+Views (the controllers) often have logic checks on whether or not it should execute code.
+Examples of this are the @login_required decorator, or to check if a requesting user is the owner of a team: "if request.user == team.manager:".
+These checks are in place in case someone accesses the view via its URL directly by typing for example: "leagues/<league_id>/del/<user_id>" with some existing IDs in their browser.
+However, the main flow of accessing a URL is via an anchor that we expose to the user for GETs or a form action for POSTs.
+When we expose these URLs in templates we only want to expose them to a subset of the users accessing the page.
+For example, on any team detail page, the team manager should have the ability to leave the league via a form action.
+For this reason we also have the same logic checks in the template as we do in the view.
+This kind of pattern goes against the DRY nature of python/django, unless we are smart about where we write our access logic.
+Solution suggestion: the view contains a method that checks user access, and we pass this method to the template to utilize the same check
+
+Detail view completion 
+=======================
+As far as displaying the right content is concerned.
+
+- [ ] Users
+    - [x] new.html
+    - [ ] user.html
+    - [ ] users.html
     
+- [ ] League
+    - [x] leagues.html
+    - [x] new.html
+    - [ ] draft.html
+    - [ ] playoffs.html
+    - [ ] rosters.html
+    - [ ] schedule.html
+    - [ ] scoring.html
+    - [ ] standings.html
+    
+- [x] Settings (Commish Panel)
+    - [x] requests.html
+    - [x] settings.html
+    
+- [ ]  Team
+    - [ ] picks.html
+    - [ ] roster.html
+    - [ ] schedule.html
+    - [ ] transactions.html
