@@ -1,9 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
+from explorer.models import RawGameData
 
 # Models
+"""
+Models for real players
+"""
+class Team(models.Model):
+    name = models.CharField(max_length=64, primary_key=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+class Player(models.Model): 
+    name = models.CharField(max_length=32, primary_key=True)
+    team = models.ForeignKey(Team)
+    
+    def __unicode__(self):
+        return self.name
 
 class User(AbstractUser):
     def may_enter_draft(self, league):
@@ -57,15 +74,14 @@ class FantasyTeam(models.Model):
     ties = models.PositiveIntegerField(default=0)
     draft_pick = models.PositiveIntegerField(null=True)
     locked = models.BooleanField(default=False)
-    
+    players = models.ManyToManyField(Player, related_name='fantasy_teams', through='FantasyContract', blank=True)
+    #users = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
     
     class Meta:
         unique_together = (('manager', 'league'), )
         
     def __unicode__(self):
         return self.name + ", " + self.manager.username
-    
-    
     
 class Message(models.Model):
     invite = models.BooleanField(default=False)
@@ -77,29 +93,23 @@ class Message(models.Model):
     new = models.BooleanField(default=True)
     
 """
-Models for real players
+Model for a FantasyTeam's ownership of a player
 """
-class Team(models.Model):
-    name = models.CharField(max_length=64, primary_key=True)
-    
-    def __unicode__(self):
-        return self.name
-    
-class Player(models.Model): 
-    name = models.CharField(max_length=20, primary_key=True)
-    team = models.ForeignKey(Team)
-    
-    def __unicode__(self):
-        return self.name
-
-"""
-Model for draft
-"""
-class Draft(models.Model):
-    league = models.ForeignKey(League)
-    round = models.PositiveIntegerField()
-    pick = models.PositiveIntegerField()
+class FantasyContract(models.Model):
+    round = models.PositiveIntegerField(null=True, blank=True)
+    pick = models.PositiveIntegerField(null=True, blank=True)
     team = models.ForeignKey(FantasyTeam)
     player = models.ForeignKey(Player)
     
+"""
+Model for FantasyTeam's matches between each other
+"""
+class FantasyMatch(models.Model):
+    teams = models.ManyToManyField(FantasyTeam)
+    date = models.DateTimeField()
+    games = models.ManyToManyField(RawGameData)
+    
+    def clean(self):
+        if self.teams.count() > 2:
+            raise ValidationError('A FantasyMatch may not have more than two teams')
     
