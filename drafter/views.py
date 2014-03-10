@@ -266,3 +266,11 @@ def team_picks(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
     return render(request, 'drafter/leagues/details/team/picks.html', { 'team': team, 'league': league })
+"""
+Team settings
+"""
+@login_required
+def team_settings(request, league_id=None, user_id=None):
+    team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
+    league = League.objects.get(id=league_id)
+    return render(request, 'drafter/leagues/details/team/settings.html', { 'team': team, 'league': league })

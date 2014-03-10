@@ -36,4 +36,5 @@ urlpatterns = patterns('',
     url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/schedule$', views.team_schedule),
     url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/transactions$', views.team_transactions),
     url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/picks$', views.team_picks),
+    url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/settings$', views.team_settings),
 )

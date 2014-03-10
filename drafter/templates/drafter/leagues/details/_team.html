@@ -17,6 +17,7 @@
         <li id="schedule-tab"><a href="{% url 'drafter.views.team_schedule' league.id user.id %}">Schedule</a></li>
         <li id="team-transactions-tab"><a href="{% url 'drafter.views.team_transactions' league.id user.id %}">Transactions</a></li>
         <li id="picks-tab"><a href="{% url 'drafter.views.team_picks' league.id user.id %}">Picks</a></li>
+        <li id="team-settings-tab"><a href="{% url 'drafter.views.team_settings' league.id user.id %}">Settings</a></li>
     </ul>
     <ul class="breadcrumb">
         <li><a href="{% url 'drafter.views.leagues' %}">Leagues</a></li>
