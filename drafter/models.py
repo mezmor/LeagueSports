@@ -109,7 +109,7 @@ class FantasyContract(models.Model):
                 ('Adc', 'ADC'),
                 ('Sup', 'Support'),
                 ('Sub', 'Sub'))
-    position = models.CharField(max_length=3, choices=POSITIONS, null=True, blank=True)
+    position = models.CharField(max_length=3, choices=POSITIONS)
     
 """
 Model for FantasyTeam's matches between each other
