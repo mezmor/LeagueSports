@@ -78,7 +78,6 @@ class FantasyTeam(models.Model):
     draft_pick = models.PositiveIntegerField(null=True)
     locked = models.BooleanField(default=False)
     players = models.ManyToManyField(Player, related_name='fantasy_teams', through='FantasyContract', blank=True)
-    #users = models.ManyToManyField(User, related_name='leagues', blank=True, through='FantasyTeam')
     
     class Meta:
         unique_together = (('manager', 'league'), )
@@ -103,6 +102,14 @@ class FantasyContract(models.Model):
     pick = models.PositiveIntegerField(null=True, blank=True)
     team = models.ForeignKey(FantasyTeam)
     player = models.ForeignKey(Player)
+    
+    POSITIONS = (('Top', 'Top'),
+                ('Jun', 'Jungle'),
+                ('Mid', 'Mid'),
+                ('Adc', 'ADC'),
+                ('Sup', 'Support'),
+                ('Sub', 'Sub'))
+    position = models.CharField(max_length=3, choices=POSITIONS, null=True, blank=True)
     
 """
 Model for FantasyTeam's matches between each other
