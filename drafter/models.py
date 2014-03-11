@@ -85,6 +85,10 @@ class FantasyTeam(models.Model):
     def __unicode__(self):
         return self.name + ", " + self.manager.username
     
+    def clean(self):
+        if self.players.count() > self.league.team_size:
+            raise ValidationError('Team may not have more than {0} players'.format(self.league.team_size))
+    
 class Message(models.Model):
     invite = models.BooleanField(default=False)
     request = models.BooleanField(default=False)
