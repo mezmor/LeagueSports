@@ -24,7 +24,9 @@ class Player(models.Model):
     
     def __unicode__(self):
         return self.name
-
+"""
+Fantasy framework models
+"""
 class User(AbstractUser):
     def may_enter_draft(self, league):
         return league in self.leagues.all() or league.commish == self
@@ -107,6 +109,7 @@ class FantasyContract(models.Model):
     team = models.ForeignKey(FantasyTeam)
     player = models.ForeignKey(Player)
     
+    # Enforce by querying all players and their positions to determine adequate number of players/position
     POSITIONS = (('Top', 'Top'),
                 ('Jun', 'Jungle'),
                 ('Mid', 'Mid'),
