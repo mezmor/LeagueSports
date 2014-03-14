@@ -6,21 +6,48 @@
         <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>League id</th>
-                    <th>League name</th>
-                    <th>Size</th>
-                    <th>Commish</th>
-                    <th>Teams</th>
+                    <th>Position</th>
+                    <th>Scoring Formula</th>
                 </tr>
             </thead>
             
             <tbody>
                 <tr>
-                    <td>{{ league.id }}</td>
-                    <td>{{ league.name }}</td>
-                    <td>{{ league.size }}</td>
-                    <td>{{ league.commish }}</td>
-                    <td>{{ teams }}</td>
+                    <td>Top</td>
+                    <td>{{ league.top_score }}</td>
+                </tr>
+                <tr>
+                    <td>Jungle</td>
+                    <td>{{ league.jungle_score }}</td>
+                </tr>
+                <tr>
+                    <td>Mid</td>
+                    <td>{{ league.mid_score }}</td>
+                </tr>
+                <tr>
+                    <td>ADC</td>
+                    <td>{{ league.ad_score }}</td>
+                </tr>
+                <tr>
+                    <td>Support</td>
+                    <td>{{ league.support_score }}</td>
+                </tr>
+            </tbody>
+            
+            <thead>
+                <tr>
+                    <th>Per Game Score Modifiers</th>
+                    <th>Modifier</th>
+                <tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Game lost</td>
+                    <td>{{ league.per_game_losing_mod }}</td>
+                </tr>
+                <tr>
+                    <td>No deaths</td>
+                    <td>{{ league.per_game_godly_mod }}</td>
                 </tr>
             </tbody>
         </table>
