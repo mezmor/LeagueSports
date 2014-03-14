@@ -70,6 +70,15 @@ class League(models.Model):
     def __unicode__(self):
         return self.name
     
+class Message(models.Model):
+    invite = models.BooleanField(default=False)
+    request = models.BooleanField(default=False)
+    sender = models.ForeignKey(User, related_name="sent_messages")
+    recipient = models.ForeignKey(User, related_name="received_messages")
+    target_league = models.ForeignKey(League, null=True, blank=True)
+    message = models.CharField(max_length = 256, blank=True)
+    new = models.BooleanField(default=True)
+
 class FantasyTeam(models.Model):
     manager = models.ForeignKey(User)
     league = models.ForeignKey(League)
@@ -90,15 +99,6 @@ class FantasyTeam(models.Model):
     def clean(self):
         if self.players.count() > self.league.team_size:
             raise ValidationError('Team may not have more than {0} players'.format(self.league.team_size))
-    
-class Message(models.Model):
-    invite = models.BooleanField(default=False)
-    request = models.BooleanField(default=False)
-    sender = models.ForeignKey(User, related_name="sent_messages")
-    recipient = models.ForeignKey(User, related_name="received_messages")
-    target_league = models.ForeignKey(League, null=True, blank=True)
-    message = models.CharField(max_length = 256, blank=True)
-    new = models.BooleanField(default=True)
     
 """
 Model for a FantasyTeam's ownership of a player
