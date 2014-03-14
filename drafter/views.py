@@ -93,7 +93,7 @@ View a league's standings
 """
 def league_standings(request, league_id=None):
     league = League.objects.get(id=league_id)
-    teams = [(a+1, b) for (a, b) in enumerate(league.teams.all())]
+    teams = [(a+1, b) for (a, b) in enumerate(league.teams.all().order_by('wins'))]
     return render(request, 'drafter/leagues/details/league/standings.html', { 'league_id': league_id, 'league': league, 'teams': teams })
 
 """
@@ -101,8 +101,7 @@ View a league's rosters
 """
 def league_rosters(request, league_id=None):
     league = League.objects.get(id=league_id)
-    teams = FantasyTeam.objects.filter(league=league)
-    return render(request, 'drafter/leagues/details/league/rosters.html', { 'league_id': league_id, 'league': league, 'teams': teams })
+    return render(request, 'drafter/leagues/details/league/rosters.html', { 'league_id': league_id, 'league': league })
     
 """
 View a league's scoring rules
