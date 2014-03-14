@@ -144,9 +144,9 @@ As far as displaying the right content is concerned.
     - [x] new.html
     - [ ] draft.html
     - [ ] playoffs.html
-    - [ ] rosters.html
+    - [x] rosters.html
     - [ ] schedule.html
-    - [ ] scoring.html
+    - [x] scoring.html
     - [x] standings.html
     
 - [x] Settings (Commish Panel)
