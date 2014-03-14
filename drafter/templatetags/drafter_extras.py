@@ -12,8 +12,8 @@ def may_enter_draft(user, league):
     return user.is_authenticated() and user.may_enter_draft(league)
 
 @register.filter
-def is_commish(user, league):
-    return league in user.managed_leagues.all()
+def is_commish(user, league_id):
+    return int(league_id) in user.managed_leagues.values_list('id', flat=True)
 
 
 @register.filter

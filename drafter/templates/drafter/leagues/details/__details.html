@@ -13,7 +13,7 @@
         <li id="players-tab" ><a href="#">Players</a></li>
         <li id="scores-tab" ><a href="#">Scores</a></li>
         <li id="transactions-tab" ><a href="#">Transactions</a></li>
-        {% if user|is_commish:league %}<li id="league-settings-tab"><a href="{% url 'drafter.views.league_settings' league_id %}">Commish Panel</a></li>{% endif %}
+        {% if user|is_commish:league_id %}<li id="league-settings-tab"><a href="{% url 'drafter.views.league_settings' league_id %}">Commish Panel</a></li>{% endif %}
     </ul>
     <script>
     $('#leagues-guide').addClass('active');

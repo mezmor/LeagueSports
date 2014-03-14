@@ -3,7 +3,7 @@
 
 {% block left_content %}
     <div class="info-pane">
-	    {% if user|has_team:league %}
+	    {% if user|has_team:league_id %}
             <form onsubmit="return confirm('Are you sure you want to delete this team?');" action="{% url 'drafter.views.del_user_from_league' league_id team.manager.id %}" method="post">
                 {% csrf_token %}
                 <input class="btn btn-default" type="submit" value="Delete Team"/>
