@@ -4,8 +4,8 @@ from django import template
 register = template.Library()
 
 @register.filter
-def has_team(user, league):
-    return user.is_authenticated() and league in user.leagues.all()
+def has_team(user, league_id):
+    return user.is_authenticated() and int(league_id) in user.leagues.values_list('id', flat=True)
 
 @register.filter
 def may_enter_draft(user, league):
@@ -13,7 +13,6 @@ def may_enter_draft(user, league):
 
 @register.filter
 def is_commish(user, league):
-    #return league.commish == user
     return league in user.managed_leagues.all()
 
 
