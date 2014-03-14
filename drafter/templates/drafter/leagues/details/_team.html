@@ -4,7 +4,7 @@
 {% block left_content %}
     <div class="info-pane">
 	    {% if user|has_team:league %}
-            <form onsubmit="return confirm('Are you sure you want to delete this team?');" action="{% url 'drafter.views.del_user_from_league' league.id team.manager.id %}" method="post">
+            <form onsubmit="return confirm('Are you sure you want to delete this team?');" action="{% url 'drafter.views.del_user_from_league' league_id team.manager.id %}" method="post">
                 {% csrf_token %}
                 <input class="btn btn-default" type="submit" value="Delete Team"/>
             </form>
@@ -13,15 +13,15 @@
 {% endblock %}
 {% block center_content %}
     <ul class="nav nav-pills">
-        <li id="roster-tab"><a href="{% url 'drafter.views.team_roster' league.id user.id %}">Roster</a></li>
-        <li id="schedule-tab"><a href="{% url 'drafter.views.team_schedule' league.id user.id %}">Schedule</a></li>
-        <li id="team-transactions-tab"><a href="{% url 'drafter.views.team_transactions' league.id user.id %}">Transactions</a></li>
-        <li id="picks-tab"><a href="{% url 'drafter.views.team_picks' league.id user.id %}">Picks</a></li>
-        <li id="team-settings-tab"><a href="{% url 'drafter.views.team_settings' league.id user.id %}">Settings</a></li>
+        <li id="roster-tab"><a href="{% url 'drafter.views.team_roster' league_id user.id %}">Roster</a></li>
+        <li id="schedule-tab"><a href="{% url 'drafter.views.team_schedule' league_id user.id %}">Schedule</a></li>
+        <li id="team-transactions-tab"><a href="{% url 'drafter.views.team_transactions' league_id user.id %}">Transactions</a></li>
+        <li id="picks-tab"><a href="{% url 'drafter.views.team_picks' league_id user.id %}">Picks</a></li>
+        <li id="team-settings-tab"><a href="{% url 'drafter.views.team_settings' league_id user.id %}">Settings</a></li>
     </ul>
     <ul class="breadcrumb">
         <li><a href="{% url 'drafter.views.leagues' %}">Leagues</a></li>
-        <li><a href="{% url 'drafter.views.league' league.id %}">{{ league.name }}</a></li>
+        <li><a href="{% url 'drafter.views.league' league_id %}">{{ team.league }}</a></li>
         <li class="active">{{ team.name }}</li>
     </ul>
     <script>

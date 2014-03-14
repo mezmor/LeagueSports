@@ -77,7 +77,7 @@ def new_league(request):
             new_league.commish = request.user
             new_league.save()
             FantasyTeam.objects.create(manager=request.user, league=new_league)
-            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_league.id })) # TODO: redirect has implicit revers
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': new_league.id })) # TODO: redirect has implicit reverse
     else:
         form = LeagueCreationForm() # Unbound form
     return render(request, 'drafter/leagues/new.html', { 'form': form })
@@ -93,8 +93,8 @@ View a league's standings
 """
 def league_standings(request, league_id=None):
     league = League.objects.get(id=league_id)
-    teams = [(a+1, b) for (a, b) in enumerate(FantasyTeam.objects.filter(league=league).order_by('wins'))]
-    return render(request, 'drafter/leagues/details/league/standings.html', { 'league': league, 'teams': teams })
+    teams = [(a+1, b) for (a, b) in enumerate(league.teams.all())]
+    return render(request, 'drafter/leagues/details/league/standings.html', { 'league_id': league_id, 'league': league, 'teams': teams })
 
 """
 View a league's rosters
@@ -102,27 +102,27 @@ View a league's rosters
 def league_rosters(request, league_id=None):
     league = League.objects.get(id=league_id)
     teams = FantasyTeam.objects.filter(league=league)
-    return render(request, 'drafter/leagues/details/league/rosters.html', { 'league': league, 'teams': teams })
+    return render(request, 'drafter/leagues/details/league/rosters.html', { 'league_id': league_id, 'league': league, 'teams': teams })
     
 """
 View a league's scoring rules
 """
 def league_scoring(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/league/scoring.html', { 'league': league })
+    return render(request, 'drafter/leagues/details/league/scoring.html', { 'league_id': league_id, 'league': league })
 """
 View a league's playoff bracket
 """
 def league_playoffs(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/league/playoffs.html', { 'league': league })
+    return render(request, 'drafter/leagues/details/league/playoffs.html', { 'league_id': league_id, 'league': league })
 
 """
 View a league's schedule
 """
 def league_schedule(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/league/schedule.html', { 'league': league })
+    return render(request, 'drafter/leagues/details/league/schedule.html', { 'league_id': league_id, 'league': league })
     
 """
 View a league's draft management page
@@ -131,7 +131,7 @@ View a league's draft management page
 def league_draft(request, league_id=None):
     league = League.objects.get(id=league_id)
     if league in request.user.leagues.all() or league.commish == request.user:
-        return render(request, 'drafter/leagues/details/league/draft.html', { 'league': league })
+        return render(request, 'drafter/leagues/details/league/draft.html', { 'league_id': league_id, 'league': league })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
     
@@ -148,7 +148,7 @@ def league_settings(request, league_id=None):
                 form.save()
         else:
             form = LeagueEditForm(instance=league) 
-        return render(request, 'drafter/leagues/details/settings/settings.html', { 'league': league, 'form': form })
+        return render(request, 'drafter/leagues/details/settings/settings.html', { 'league_id': league_id, 'league': league, 'form': form })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
     
@@ -164,7 +164,7 @@ def new_join_requests(request, league_id=None):
     # Only a commish may see the new requests
     if league.commish == request.user:
         requests = Message.objects.filter(request=True, target_league=league_id, new=True)
-        return render(request, 'drafter/leagues/details/settings/requests.html', { 'league': league, 'requests': requests })
+        return render(request, 'drafter/leagues/details/settings/requests.html', { 'league_id': league_id, 'league': league, 'requests': requests })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
     
@@ -222,7 +222,7 @@ def add_user_to_league(request, league_id=None, user_id=None):
 """
 Remove a user from the given league
 Currently deletes the FantasyTeam object assocated with the user and league
-TODO: Instead of deleting the FantasyTeam, unset the manager and keep the team object so as to reassign the manager
+TODO: Instead of deleting the FantasyTeam, unset the manager and keep the team object so as to assign a new manager
 """
 @login_required
 def del_user_from_league(request, league_id=None, user_id=None):
@@ -243,29 +243,28 @@ Team related views
 """
 def team_roster(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
-    league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/team/roster.html', { 'team': team, 'league': league })
+    return render(request, 'drafter/leagues/details/team/roster.html', { 'team': team, 'league_id': league_id })
 """
 Team schedule
 """
 def team_schedule(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/team/schedule.html', { 'team': team, 'league': league })
+    return render(request, 'drafter/leagues/details/team/schedule.html', { 'team': team, 'league': league, 'league_id': league_id })
 """
 Team transactions
 """
 def team_transactions(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/team/transactions.html', { 'team': team, 'league': league })
+    return render(request, 'drafter/leagues/details/team/transactions.html', { 'team': team, 'league': league, 'league_id': league_id })
 """
 Team draft picks
 """
 def team_picks(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/team/picks.html', { 'team': team, 'league': league })
+    return render(request, 'drafter/leagues/details/team/picks.html', { 'team': team, 'league': league, 'league_id': league_id })
 """
 Team settings
 """
@@ -273,4 +272,4 @@ Team settings
 def team_settings(request, league_id=None, user_id=None):
     team = FantasyTeam.objects.get(league_id=league_id, manager=user_id)
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/team/settings.html', { 'team': team, 'league': league })
+    return render(request, 'drafter/leagues/details/team/settings.html', { 'team': team, 'league': league, 'league_id': league_id })

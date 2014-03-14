@@ -5,7 +5,7 @@ register = template.Library()
 
 @register.filter
 def has_team(user, league):
-    return user.is_authenticated() and FantasyTeam.objects.filter(manager=user, league=league).count() > 0
+    return user.is_authenticated() and league in user.leagues.all()
 
 @register.filter
 def may_enter_draft(user, league):
@@ -13,7 +13,9 @@ def may_enter_draft(user, league):
 
 @register.filter
 def is_commish(user, league):
-    return league.commish == user
+    #return league.commish == user
+    return league in user.managed_leagues.all()
+
 
 @register.filter
 def request_exists(league, user_id):

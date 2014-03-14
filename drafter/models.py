@@ -81,7 +81,7 @@ class Message(models.Model):
 
 class FantasyTeam(models.Model):
     manager = models.ForeignKey(User)
-    league = models.ForeignKey(League)
+    league = models.ForeignKey(League, related_name="teams")
     name = models.CharField(max_length=32, default="The Bedazzling Defaults")
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
