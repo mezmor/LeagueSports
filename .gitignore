@@ -6,4 +6,5 @@
 # Compile files
 *.pyc
 LeagueSports/*.pyc
+LeagueSports/secret_key.py
 main.db
