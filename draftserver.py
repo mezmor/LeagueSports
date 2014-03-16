@@ -6,9 +6,6 @@ import tornado.web
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "LeagueSports.settings")
 
-from django.conf import settings
-#from LeagueSports import settings as league_settings
-#settings.configure(default_settings=league_settings, LOGGING_CONFIG=None)
 from django.contrib.sessions.models import Session
  
 
