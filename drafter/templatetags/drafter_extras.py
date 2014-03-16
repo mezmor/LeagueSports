@@ -23,7 +23,3 @@ def request_exists(league, user_id):
 @register.filter
 def new_requests(league):
     return Message.objects.filter(request=True, target_league=league, new=True).count()
-
-@register.filter
-def fields(object):
-    return str(object._meta.get_all_field_names())
