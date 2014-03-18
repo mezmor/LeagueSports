@@ -8,7 +8,7 @@
             {% if league|request_exists:user.id %}
                 <a class="btn btn-default" href="#">Request Submitted</a>
             {% else %}
-	        <form action="{% url 'drafter.views.join_league' league_id %}" method="post">
+	        <form action="{% url 'drafter.views.join_league' league.id %}" method="post">
 		        {% csrf_token %}
 		        {% if league.public %}
 		            <input class="btn btn-default" type="submit" value="Join"/>
@@ -56,13 +56,13 @@
 {% endblock %}
 {% block center_content %}
     <ul class="nav nav-pills">
-        <li id="standings-tab"><a href="{% url 'drafter.views.league_standings' league_id %}">Standings</a></li>
-        <li id="rosters-tab"><a href="{% url 'drafter.views.league_rosters' league_id %}">Rosters</a></li>
-        <li id="scoring-tab"><a href="{% url 'drafter.views.league_scoring' league_id %}">Scoring</a></li>
-        <li id="playoffs-tab"><a href="{% url 'drafter.views.league_playoffs' league_id %}">Playoffs</a></li>
-        <li id="schedule-tab"><a href="{% url 'drafter.views.league_schedule' league_id %}">Schedule</a></li>
+        <li id="standings-tab"><a href="{% url 'drafter.views.league_standings' league.id %}">Standings</a></li>
+        <li id="rosters-tab"><a href="{% url 'drafter.views.league_rosters' league.id %}">Rosters</a></li>
+        <li id="scoring-tab"><a href="{% url 'drafter.views.league_scoring' league.id %}">Scoring</a></li>
+        <li id="playoffs-tab"><a href="{% url 'drafter.views.league_playoffs' league.id %}">Playoffs</a></li>
+        <li id="schedule-tab"><a href="{% url 'drafter.views.league_schedule' league.id %}">Schedule</a></li>
         {% if user|may_enter_draft:league %}
-            <li id="draft-tab"><a href="{% url 'drafter.views.league_draft' league_id %}">Draft</a></li>
+            <li id="draft-tab"><a href="{% url 'drafter.views.league_draft' league.id %}">Draft</a></li>
         {% endif %}
     </ul>
     <ul class="breadcrumb">
