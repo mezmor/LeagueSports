@@ -3,7 +3,7 @@ from django.template import RequestContext
 from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from drafter.models import League, User, FantasyTeam, Message
+from drafter.models import League, User, FantasyTeam, Message, ConnectionTicket
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
@@ -126,14 +126,45 @@ def league_schedule(request, league_id=None):
 """
 View a league's draft management page
 """
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+    
 @login_required
 def league_draft(request, league_id=None):
     league = League.objects.get(id=league_id)
+    
+    # Get IP
+    ip = get_client_ip(request)
+    # Create connection ticket, one per user
+    try:
+        ticket = ConnectionTicket.objects.get(user=request.user)
+        ticket.delete()
+    except ConnectionTicket.DoesNotExist:
+        ticket = None
+    
+    ticket = ConnectionTicket.objects.create(user=request.user, user_ip=ip)
+    
     if league in request.user.leagues.all() or league.commish == request.user:
-        return render(request, 'drafter/leagues/details/league/draft.html', { 'league_id': league_id, 'league': league })
+        return render(request, 'drafter/leagues/details/league/draft.html', { 'league_id': league_id, 'league': league, 'ticket': ticket })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-    
+"""
+IN THE VIEW:
+When the client-side code decides to open a WebSocket, it contacts the HTTP server to obtain an authorization "ticket".   
+The server generates this ticket. It typically contains some sort of user/account ID, the IP of the client requesting the ticket, a timestamp, and any other sort of internal record-keeping you might need.
+The server stores this ticket (i.e. in a database or cache), and also returns it to the client.
+    We open a websocket when the draft page is opened, thus we can create this ticket in the draft view
+    We save the ticket pass the generated ticket to the context and send it to the websocket
+IN THE SOCKET:
+The client opens the WebSocket connection, and sends along this "ticket" as part of an initial handshake.
+The server can then compare this ticket, check source IPs, verify that the ticket hasn't been re-used and hasn't expired, and do any other sort of permission checking. If all goes well, the WebSocket connection is now verified.
+"""
+
 """
 View a league's commish panel
 """

@@ -131,4 +131,13 @@ class FantasyMatch(models.Model):
             raise ValidationError('A FantasyMatch may not have more than two teams')
         if self.teams.count() == 2 and self.teams[0].league != self.teams[1].league:
             raise ValidationError('Both FantasyTeam\'s must be in the same league')
-            
+           
+"""
+Model for draft application's connection tickets
+""" 
+class ConnectionTicket(models.Model):
+    user = models.ForeignKey(User, primary_key=True) # Set this as PK?
+    user_ip = models.GenericIPAddressField(protocol='ipv4')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
