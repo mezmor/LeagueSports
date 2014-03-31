@@ -1,5 +1,6 @@
-from drafter.models import FantasyTeam, User, Message
+from drafter.models import User, Message
 from django import template
+from django.contrib.auth.models import AnonymousUser
 
 register = template.Library()
 
@@ -13,6 +14,8 @@ def may_enter_draft(user, league):
 
 @register.filter
 def is_commish(user, league_id):
+    if user is not AnonymousUser:
+        return False
     return int(league_id) in user.managed_leagues.values_list('id', flat=True)
 
 

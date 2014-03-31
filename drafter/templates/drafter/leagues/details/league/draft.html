@@ -19,22 +19,17 @@
             </tbody>
         </table>
     </div>
-    {{ ticket.user }}
-    {{ ticket.user_ip }}
-    {{ ticket.created_at }}
-    {{ league }}
     <script>
     $('#draft-tab').addClass('active');
     var ws = new WebSocket("ws://localhost:8888/ws");
     ws.onopen = function() {
-       ws.send("session:{{ request.COOKIES.sessionid }}");
-       ws.send("ticket:{{ ticket }}");
+    	ws.send("league::{{ league_id }}")
     };
     ws.onmessage = function (evt) {
        alert(evt.data);
     };
     $('#data-button').click(function(){
-    	ws.send("session:{{ request.COOKIES.sessionid }}");
+    	ws.send("session::{{ request.COOKIES.sessionid }}");
     });
     </script>
 {% endblock %}

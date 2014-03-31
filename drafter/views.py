@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect, render_to_response
-from django.template import RequestContext
+from django.shortcuts import render, redirect
 from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -136,21 +135,25 @@ def get_client_ip(request):
     
 @login_required
 def league_draft(request, league_id=None):
+    """
+    We open a websocket to the real-time drafting app on the draft page
+    Get the session of the requester and create a ConnectionTicket
+    The websocket server will accept/reject the ConnectionTicket
+    """
     league = League.objects.get(id=league_id)
-    
-    # Get IP
-    ip = get_client_ip(request)
-    # Create connection ticket, one per user
-    try:
-        ticket = ConnectionTicket.objects.get(user=request.user)
-        ticket.delete()
-    except ConnectionTicket.DoesNotExist:
-        ticket = None
-    
-    ticket = ConnectionTicket.objects.create(user=request.user, user_ip=ip)
-    
     if league in request.user.leagues.all() or league.commish == request.user:
-        return render(request, 'drafter/leagues/details/league/draft.html', { 'league_id': league_id, 'league': league, 'ticket': ticket })
+        # Get Session
+        sessionid = request.COOKIES.get('sessionid')
+        # Create connection ticket, one per user
+        try:
+            ticket = ConnectionTicket.objects.get(user=request.user)
+            ticket.delete()
+        except ConnectionTicket.DoesNotExist:
+            ticket = None
+        # JSONify the relevant fields
+        ticket = ConnectionTicket.objects.create(user=request.user, user_sessionid=sessionid)
+        
+        return render(request, 'drafter/leagues/details/league/draft.html', { 'league_id': league_id, 'league': league })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 """

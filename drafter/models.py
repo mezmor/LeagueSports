@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.sessions.models import Session
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
@@ -137,7 +138,7 @@ Model for draft application's connection tickets
 """ 
 class ConnectionTicket(models.Model):
     user = models.ForeignKey(User, primary_key=True) # Set this as PK?
-    user_ip = models.GenericIPAddressField(protocol='ipv4')
+    user_sessionid = models.CharField(max_length=40)
     created_at = models.DateTimeField(auto_now_add=True)
     
     
