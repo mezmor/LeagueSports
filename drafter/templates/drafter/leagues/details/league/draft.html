@@ -11,11 +11,7 @@
                 </tr>
             </thead>
             
-            <tbody>
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td><button id="data-button" type="button" class="btn btn-default">Data</button></td>
-                </tr>
+            <tbody id="user-list">
             </tbody>
         </table>
     </div>
@@ -26,7 +22,14 @@
     	ws.send("league::{{ league_id }}")
     };
     ws.onmessage = function (evt) {
-       alert(evt.data);
+        data = evt.data.split("::");
+        if(data[0] === "join"){
+        	$('#user-list').append("<tr id=\"" + data[1] + "\"><td>" + data[1] + "</td><td></td></tr>");
+        }
+        else if(data[0] === "leave"){
+        	element = '#' + data[1]
+        	$(element).remove()
+        }
     };
     $('#data-button').click(function(){
     	ws.send("session::{{ request.COOKIES.sessionid }}");

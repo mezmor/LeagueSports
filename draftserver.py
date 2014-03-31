@@ -46,6 +46,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         # Check if there is a ConnectionTicket with the associated sessionid, if not close
         try:
             ticket = ConnectionTicket.objects.get(user_sessionid=session.session_key)
+            self.user = ticket.user # Keep a reference to the current user
             print "Ticket get successful"
         except ConnectionTicket.DoesNotExist:
             print "Ticket get failed"
@@ -66,25 +67,32 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if data[0] == 'league':
             if self not in connection_buffer:
                 return
+            self.leagueid = data[1] # Keep a reference to the current leagueid
             try:
-                connections[data[1]].append(self)
+                connections[self.leagueid].append(self)
             except KeyError:
-                connections[data[1]] = [self]
+                connections[self.leagueid] = [self]
             connection_buffer.remove(self)
-            print "Added connection to pool"
+            print "Added connection to pool: " + str(connections)
+            
+            message = "join::" + str(self.user.username)
+            for connection in connections[self.leagueid]:
+                if connection is not self:
+                    connection.write_message(message)
+                self.write_message("join::"+str(connection.user.username))
         
-        if data[0] == 'session':
+        if data[0] == 'join':
             session = Session.objects.get(session_key=data[1])
             print "Session: " + str(session)
             self.write_message('Data Found!')
  
     def on_close(self):
         # Remove this connection from the connections pool
-        for (league, connection) in connections.items():
-            print league + " " + str(connection)
-            if self in connection:
-                connections[league].remove(self)
-                break
+        message = "leave::" + str(self.user.username)
+        for connection in connections[self.leagueid]:
+            if connection is not self:
+                connection.write_message(message)
+        connections[self.leagueid].remove(self)
         print 'connection closed'
         
 application = tornado.web.Application([
