@@ -20,6 +20,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         To validate a connection we take the cookie's sessionid and query for its ConnectionTicket
         If there is no cookie, close the connection
         If there is no sessionid, close the connection
+        If there is no session associated with the sessionid, close the connection
         If there is no ConnectionTicket, close the connection
         Otherwise delete the ConnectionTicket and add the connection the appropriate pool
         """
