@@ -38,6 +38,7 @@ Users should be able to join a league
      * Button on All Leagues list
      * Button on User's League list
      * Button in League detail
+
 Users should be able to leave a league
    * their team is disbanded and all players become free agents
     
