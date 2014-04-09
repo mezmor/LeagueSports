@@ -186,6 +186,9 @@ def league_settings(request, league_id=None):
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 
+"""
+View a league's draft settings
+"""
 @login_required
 def league_draft_settings(request, league_id=None):
     league = League.objects.get(id=league_id)
