@@ -66,7 +66,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         print 'data received: %s' % data
         if len(data) < 2:
             return
-        
+        # If we receive league data, the connection should be in the connection buffer
         if data[0] == 'league':
             if self not in connection_buffer:
                 return
@@ -78,17 +78,14 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             connection_buffer.remove(self)
             print "Added connection to pool: " + str(connections)
             
+            # Notify all connections in the pool of the new connection
+            # Notify the new connection of all the connections in the pool
             message = "join::" + str(self.user.username)
             for connection in connections[self.leagueid]:
                 if connection is not self:
                     connection.write_message(message)
                 self.write_message("join::"+str(connection.user.username))
         
-        if data[0] == 'join':
-            session = Session.objects.get(session_key=data[1])
-            print "Session: " + str(session)
-            self.write_message('Data Found!')
- 
     def on_close(self):
         # Remove this connection from the connections pool
         message = "leave::" + str(self.user.username)
