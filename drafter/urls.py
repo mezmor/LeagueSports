@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     # Commish settings URLs
     url(r'^leagues/(?P<league_id>\d+)/settings/$', views.league_settings),
     url(r'^leagues/(?P<league_id>\d+)/settings/requests$', views.new_join_requests),
+    url(r'^leagues/(?P<league_id>\d+)/settings/draft$', views.league_draft_settings),
     url(r'^requests/(?P<request_id>\d+)/del$', views.del_request),
     
     # FantasyTeam URLs, user-league management

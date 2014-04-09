@@ -4,6 +4,7 @@
     <ul class="nav nav-pills">
         <li id="main-tab"><a href="{% url 'drafter.views.league_settings' league.id %}">Main</a></li>
         <li id="requests-tab"><a href="{% url 'drafter.views.new_join_requests' league.id %}">Requests</a></li>
+        <li id="draft-settings-tab"><a href="{% url 'drafter.views.league_draft_settings' league.id %}">Draft</a></li>
     </ul>
     <ul class="breadcrumb">
         <li><a href="{% url 'drafter.views.leagues' %}">Leagues</a></li>

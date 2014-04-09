@@ -1,0 +1,31 @@
+{% extends 'drafter/leagues/details/_settings.html' %}
+{% block title %}LeagueSports - League Settings Panel{% endblock %}
+
+{% block left_content %}
+{% endblock %}
+{% block league_content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Manager</th>
+                    <th>Team</th>
+                    <th>Draft Pick</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for team in league.teams.all %}
+	            <tr>
+	                <td>{{ team.manager }}</td>
+	                <td>{{ team.name }}</td>
+	                <td>{{ team.draft_pick }}</td>
+	            </tr>
+	            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+    $('#draft-settings-tab').addClass('active');
+    </script>
+{% endblock %}

@@ -150,8 +150,9 @@ def league_draft(request, league_id=None):
             ticket.delete()
         except ConnectionTicket.DoesNotExist:
             ticket = None
-        # JSONify the relevant fields
+        
         ticket = ConnectionTicket.objects.create(user=request.user, user_sessionid=sessionid)
+        # Send this back to the user?
         
         return render(request, 'drafter/leagues/details/league/draft.html', { 'league_id': league_id, 'league': league })
     else:
@@ -184,7 +185,11 @@ def league_settings(request, league_id=None):
         return render(request, 'drafter/leagues/details/settings/settings.html', { 'league_id': league_id, 'league': league, 'form': form })
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-    
+
+@login_required
+def league_draft_settings(request, league_id=None):
+    league = League.objects.get(id=league_id)
+    return render(request, 'drafter/leagues/details/settings/draft.html', { 'league_id': league_id, 'league': league, })
 """
 Request-related views
 """
