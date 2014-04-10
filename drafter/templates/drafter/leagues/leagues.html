@@ -53,6 +53,10 @@
 	                                    {% endif %}
 	                                </form>
 	                            {% endif %}
+	                        {% else %} 
+	                        {% if user.is_authenticated and user|is_commish:league.id %}
+	                            <a href="{% url 'drafter.views.new_join_requests' league.id %}">{{ league|new_requests }}</a> new requests
+	                        {% endif %}
                             {% endif %}
 		                    </td>
 		                </tr>
