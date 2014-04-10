@@ -9,7 +9,7 @@
 {% endblock %}
 {% block center_content %}
     <ul id="leagues-tabs" class="nav nav-pills">
-        <li><a id="new_league" class="btn-success" href="{% url 'drafter.views.new_league' %}">New League</a></li>
+        {% if user.is_authenticated %}<li><a id="new_league" class="btn-success" href="{% url 'drafter.views.new_league' %}">New League</a></li>{% endif %}
         <li class="active"><a href="#all-leagues" data-troggle="tab">All Leagues</a></li>
         {% if user.is_authenticated %}
             <li><a href="#my-leagues" data-troggle="tab">My Leagues</a></li>
