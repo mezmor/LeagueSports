@@ -87,7 +87,7 @@ class FantasyTeam(models.Model):
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
     ties = models.PositiveIntegerField(default=0)
-    draft_pick = models.PositiveIntegerField(null=True)
+    draft_pick = models.PositiveIntegerField(null=True, validators=[MinValueValidator(1)])
     locked = models.BooleanField(default=False)
     players = models.ManyToManyField(Player, related_name='fantasy_teams', through='FantasyContract', blank=True)
     

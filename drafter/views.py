@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from drafter.forms import LeagueCreationForm, LeagueEditForm, UserCreationForm
+from django.forms.models import modelformset_factory
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from drafter.models import League, User, FantasyTeam, Message, ConnectionTicket
@@ -192,7 +193,15 @@ View a league's draft settings
 @login_required
 def league_draft_settings(request, league_id=None):
     league = League.objects.get(id=league_id)
-    return render(request, 'drafter/leagues/details/settings/draft.html', { 'league_id': league_id, 'league': league, })
+    if league.commish == request.user:
+        DraftOrderFormSet = modelformset_factory(FantasyTeam, fields=("draft_pick", ), max_num=league.teams.count(), extra=0)
+        if request.method == 'POST':
+            formset = DraftOrderFormSet(request.POST, queryset=FantasyTeam.objects.filter(league=league))
+            if formset.is_valid():
+                formset.save()
+        else:
+            formset = DraftOrderFormSet(queryset=FantasyTeam.objects.filter(league=league))
+    return render(request, 'drafter/leagues/details/settings/draft.html', { 'league_id': league_id, 'league': league, 'formset': formset})
 """
 Request-related views
 """
