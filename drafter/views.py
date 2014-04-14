@@ -220,6 +220,11 @@ def new_join_requests(request, league_id=None):
     
 """
 Join request
+
+"""
+"""
+TODO
+REMOVE THIS FUCKING METHOD
 """
 @login_required
 def join_league(request, league_id=None):
