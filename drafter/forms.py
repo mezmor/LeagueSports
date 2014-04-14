@@ -1,5 +1,5 @@
-from django.forms import ModelForm, ValidationError, ModelChoiceField, HiddenInput, BooleanField
-from drafter.models import League, User, Message
+from django.forms import ModelForm, ValidationError
+from drafter.models import League, User
 from django.contrib.auth.forms import UserCreationForm
 
 
