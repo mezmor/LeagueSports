@@ -8,15 +8,18 @@
             {% if league|request_exists:user.id %}
                 <a class="btn btn-default" href="#">Request Submitted</a>
             {% else %}
-	        <form action="{% url 'drafter.views.create_request' league.id %}" method="post">
-		        {% csrf_token %}
-		        {% if league.public %}
-		            <input class="btn btn-default" type="submit" value="Join"/>
-		        {% else %}
-		            <input class="btn btn-default" type="submit" value="Request to Join"/>
-		        {% endif %}
-	        </form>
-	        {% endif %}
+                {% if league.public %}
+                    <form action="{% url 'drafter.views.create_team' league.id user.id %}" method="post">
+	                    {% csrf_token %}
+	                    <input class="btn btn-default" type="submit" value="Join"/>
+                    </form>
+                {% else %}
+	                <form action="{% url 'drafter.views.create_request' league.id %}" method="post">
+	                    {% csrf_token %}
+	                    <input class="btn btn-default" type="submit" value="Request to Join"/>
+                    </form>
+                {% endif %}
+            {% endif %}
 	    {% endif %}
     </div>
     <script>

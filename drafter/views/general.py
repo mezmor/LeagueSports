@@ -22,7 +22,7 @@ def create_team(request, league_id=None, user_id=None):
     if request.method == 'POST':
         league = League.objects.get(id=league_id)
         # If there is already a team associated with this user
-        # or if the requester is not the league commish, they can not add a user to the league, so redirect
+        # or if the requester is not the league commish, they can (ONLY ADD THEMSELVES!!!) not add a user to the league, so redirect
         if FantasyTeam.objects.filter(manager=user_id, league=league_id).count() > 0 or not request.user == league.commish:
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
         
