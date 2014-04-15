@@ -21,7 +21,7 @@
                         <td>{{ request.sender }}</td>
                         <td>{{ request.recipient }}</td>
                         <td>{{ request.target_league }}</td>
-                        <td><form action="{% url 'drafter.views.add_user_to_league' league.id request.sender.id %}" method="post">{% csrf_token %}<input class="" type="submit" value="Add User"/></form>
+                        <td><form action="{% url 'drafter.views.create_team' league.id request.sender.id %}" method="post">{% csrf_token %}<input class="" type="submit" value="Add User"/></form>
                         | <form action="{% url 'drafter.views.del_request' request.id %}" method="get">{% csrf_token %}<input class="" type="submit" value="Del Request"/></form>
                         </td>
                     </tr>

@@ -14,7 +14,7 @@ def may_enter_draft(user, league):
 
 @register.filter
 def is_commish(user, league_id):
-    if user is AnonymousUser:
+    if not user.is_authenticated():
         return False
     return int(league_id) in user.managed_leagues.values_list('id', flat=True)
 

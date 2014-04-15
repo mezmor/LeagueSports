@@ -44,7 +44,7 @@
 	                            {% if league|request_exists:user.id %}
 	                               <p>Request Submitted</p>
 	                            {% else %}
-	                                <form action="{% url 'drafter.views.join_league' league.id %}" method="post">
+	                                <form action="{% url 'drafter.views.create_request' league.id %}" method="post">
 	                                    {% csrf_token %}
 	                                    {% if league.public %}
 	                                        <input class="btn btn-default" type="submit" value="Join"/>
@@ -54,7 +54,7 @@
 	                                </form>
 	                            {% endif %}
 	                        {% else %} 
-	                        {% if user.is_authenticated and user|is_commish:league.id %}
+	                        {% if user|is_commish:league.id %}
 	                            <a href="{% url 'drafter.views.new_join_requests' league.id %}">{{ league|new_requests }}</a> new requests
 	                        {% endif %}
                             {% endif %}

@@ -17,7 +17,7 @@ League interaction views
 Create a FantasyTeam with given league and user
 """
 @login_required
-def add_user_to_league(request, league_id=None, user_id=None):
+def create_team(request, league_id=None, user_id=None):
     # If the request is a POST we hit the DB and do access checks
     if request.method == 'POST':
         league = League.objects.get(id=league_id)
