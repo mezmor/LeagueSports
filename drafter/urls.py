@@ -27,12 +27,14 @@ urlpatterns = patterns('',
     url(r'^leagues/(?P<league_id>\d+)/settings/$', views.league_settings),
     url(r'^leagues/(?P<league_id>\d+)/settings/requests$', views.new_join_requests),
     url(r'^leagues/(?P<league_id>\d+)/settings/draft$', views.league_draft_settings),
+    
+    # Request URLS
+    url(r'^leagues/(?P<league_id>\d+)/join/$', views.create_request),
     url(r'^requests/(?P<request_id>\d+)/del$', views.del_request),
     
     # FantasyTeam URLs, user-league management
-    url(r'^leagues/(?P<league_id>\d+)/join/$', views.create_request),
     url(r'^leagues/(?P<league_id>\d+)/add/(?P<user_id>\d+)$', views.create_team),
-    url(r'^leagues/(?P<league_id>\d+)/del/(?P<user_id>\d+)$', views.del_user_from_league),
+    url(r'^leagues/(?P<league_id>\d+)/del/(?P<user_id>\d+)$', views.delete_team),
     url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/roster$', views.team_roster),
     url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/schedule$', views.team_schedule),
     url(r'^leagues/(?P<league_id>\d+)/(?P<user_id>\d+)/transactions$', views.team_transactions),
