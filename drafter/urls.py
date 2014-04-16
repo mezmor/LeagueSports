@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     
     # Request URLS
     url(r'^leagues/(?P<league_id>\d+)/join/$', views.create_request),
-    url(r'^requests/(?P<request_id>\d+)/del$', views.del_request),
+    url(r'^requests/(?P<request_id>\d+)/del$', views.delete_request),
     
     # FantasyTeam URLs, user-league management
     url(r'^leagues/(?P<league_id>\d+)/add/(?P<user_id>\d+)$', views.create_team),

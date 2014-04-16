@@ -1,5 +1,6 @@
 {% extends 'drafter/leagues/details/_league.html' %}
 {% block title %}LeagueSports - League Standings{% endblock %}
+{% load drafter_extras %}
 
 {% block league_content %}
     <div class="table-responsive">
@@ -19,7 +20,15 @@
                 {% for index, team in teams %}
                 <tr>
                     <td>{{ index }}/{{ league.size }}</td>
-                    <td><a href="{% url 'drafter.views.team_roster' league.id team.manager.id %}">{{ team.name }}</a></td>
+                    <td>
+                    	<a href="{% url 'drafter.views.team_roster' league.id team.manager.id %}">{{ team.name }}</a>
+                    	{% if user|is_commish:league_id or user.id == team.manager.id %}
+	            			<form onsubmit="return confirm('Are you sure you want to delete this team?');" action="{% url 'drafter.views.delete_team' league_id team.manager.id %}" method="post">
+			                {% csrf_token %}
+			                <span class="label label-danger"><input type="submit" value="Delete"/></span>
+				            </form>
+			        	{% endif %}
+                    </td>
                     <td><a href="{% url 'drafter.views.user' team.manager.id %}">{{ team.manager }}</a></td>
                     <td>{{ team.wins }}</td>
                     <td>{{ team.losses }}</td>

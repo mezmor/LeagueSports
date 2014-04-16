@@ -22,7 +22,6 @@ def new_join_requests(request, league_id=None):
     
 """
 Join request
-
 """
 @login_required
 def create_request(request, league_id=None):
@@ -44,7 +43,7 @@ def create_request(request, league_id=None):
 Delete the given join request
 """
 @login_required
-def del_request(request, request_id=None):
+def delete_request(request, request_id=None):
     join_request = Message.objects.get(id=request_id)
     if request.user == join_request.recipient:
         join_request.delete()

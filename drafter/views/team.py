@@ -57,7 +57,7 @@ def create_team(request, league_id=None, user_id=None):
             FantasyTeam.objects.create(manager=User.objects.get(id=user_id), league=league)
             try:
                 join_request = Message.objects.get(target_league=league, sender=user_id)
-                return redirect(reverse('drafter.views.del_request', kwargs={ 'request_id': join_request.id }))
+                return redirect(reverse('drafter.views.delete_request', kwargs={ 'request_id': join_request.id }))
             except Message.DoesNotExist:
                 pass
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
