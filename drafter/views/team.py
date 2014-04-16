@@ -44,9 +44,6 @@ def team_settings(request, league_id=None, user_id=None):
     return render(request, 'drafter/leagues/details/team/settings.html', { 'team': team, 'league': league, 'league_id': league_id })
 
 """
-League interaction views
-"""
-"""
 Create a FantasyTeam with given league and user
 """
 @login_required
@@ -54,14 +51,15 @@ def create_team(request, league_id=None, user_id=None):
     # If the request is a POST we hit the DB and do access checks
     if request.method == 'POST':
         league = League.objects.get(id=league_id)
-        # If there is already a team associated with this user
-        # or if the requester is not the league commish, they can (ONLY ADD THEMSELVES!!!) not add a user to the league, so redirect
-        if FantasyTeam.objects.filter(manager=user_id, league=league_id).count() > 0 or not request.user == league.commish:
-            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-        
-        FantasyTeam.objects.create(manager=User.objects.get(id=user_id), league=league)
-        join_request = Message.objects.get(target_league=league, sender=user_id)
-        return redirect(reverse('drafter.views.del_request', kwargs={ 'request_id': join_request.id }))
+        # Create a team if there is no team associated with the given (league_id, user_id)
+        # and the requesting user is either the league's commish or the given user
+        if FantasyTeam.objects.filter(manager=user_id, league=league_id).count() == 0 and (request.user.id == int(user_id) or request.user == league.commish):
+            FantasyTeam.objects.create(manager=User.objects.get(id=user_id), league=league)
+            try:
+                join_request = Message.objects.get(target_league=league, sender=user_id)
+                return redirect(reverse('drafter.views.del_request', kwargs={ 'request_id': join_request.id }))
+            except Message.DoesNotExist:
+                pass
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 """

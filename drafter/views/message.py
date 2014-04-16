@@ -24,10 +24,6 @@ def new_join_requests(request, league_id=None):
 Join request
 
 """
-"""
-TODO
-REMOVE THIS FUCKING METHOD
-"""
 @login_required
 def create_request(request, league_id=None):
     # If the request was a post, hit the DB and do access checks
@@ -36,11 +32,9 @@ def create_request(request, league_id=None):
         # If the league is full we return:
         if league.users.count() >= league.size:
             return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
-        # If the league is public, let the logged in user join
+        # If the league is public, redirect
         if league.public:
-            #FantasyTeam.objects.create(manager=request.user, league=league)
-            return redirect(reverse('drafter.views.create_team', kwargs={'league_id': league_id, 'user_id': request.user.id }))
-            #return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+            return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
         else:
             # If the league is private, send a join request
             Message.objects.create(sender=User.objects.get(id=request.user.id), recipient=league.commish, target_league=league, request=True)
