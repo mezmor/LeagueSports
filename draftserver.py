@@ -34,7 +34,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if not "sessionid" in cookie_dict.keys():
             self.close()
         
-        sessionid = cookie_dict.get("sessionid") # Bug here, returns NoneType
+        sessionid = cookie_dict.get("sessionid")
         
         # Check if session id exists
         print "Getting sessionid: " + sessionid
