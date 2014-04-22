@@ -34,6 +34,11 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if not "sessionid" in cookie_dict.keys():
             self.close()
         
+        if cookie_dict.get("sessionid") is NoneType:
+            print "ERROR sessionid not in cookie"
+            print cookie_dict
+            self.close()
+        
         sessionid = cookie_dict.get("sessionid") # Malfunctioning in Incognito mode
         
         # Check if session id exists
