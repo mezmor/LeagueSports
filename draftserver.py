@@ -39,7 +39,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             print cookie_dict
             self.close()
         
-        sessionid = cookie_dict.get("sessionid") # Malfunctioning in Incognito mode
+        sessionid = cookie_dict.get("sessionid") # Sometimes Malfunctioning in Incognito mode
         
         # Check if session id exists
         print "Getting sessionid: " + sessionid
