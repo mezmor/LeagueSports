@@ -8,7 +8,8 @@ LeagueSports
 4. Then run ```git status``` If git detects that you've changed settings.py run the following command ```git update-index --assume-unchanged path/to/LeagueSports/settings.py```
 
 ## Running the server
-LeagueSports contains two servers, one for serving the static website and one for serving the realtime draft.
+LeagueSports contains two servers, one for serving the website (django) and one for serving the realtime draft (tornado).
 To run the servers:
+
 1. Django: ```python manage.py runserver```
 2. Drafter: ```python draftserver.py```
