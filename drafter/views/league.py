@@ -107,6 +107,7 @@ def league_draft(request, league_id=None):
     else:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
 """
+from https://devcenter.heroku.com/article/websocket-security
 IN THE VIEW:
 When the client-side code decides to open a WebSocket, it contacts the HTTP server to obtain an authorization "ticket".   
 The server generates this ticket. It typically contains some sort of user/account ID, the IP of the client requesting the ticket, a timestamp, and any other sort of internal record-keeping you might need.
