@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from drafter.forms import LeagueCreationForm, LeagueEditForm
+from drafter.forms import LeagueCreationForm, LeagueEditForm, BaseDraftOrderFormSet
 from django.forms.models import modelformset_factory
 from django.contrib.auth.decorators import login_required
 from drafter.models import League, FantasyTeam, ConnectionTicket
@@ -143,7 +143,7 @@ View a league's draft settings
 def league_draft_settings(request, league_id=None):
     league = League.objects.get(id=league_id)
     if league.commish == request.user:
-        DraftOrderFormSet = modelformset_factory(FantasyTeam, fields=("draft_pick", ), max_num=league.teams.count(), extra=0)
+        DraftOrderFormSet = modelformset_factory(FantasyTeam, fields=("draft_pick", ), formset=BaseDraftOrderFormSet, max_num=league.teams.count(), extra=0)
         if request.method == 'POST':
             formset = DraftOrderFormSet(request.POST, queryset=FantasyTeam.objects.filter(league=league))
             if formset.is_valid():

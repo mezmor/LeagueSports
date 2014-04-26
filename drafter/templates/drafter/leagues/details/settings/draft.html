@@ -8,6 +8,11 @@
     	<form action="{% url 'drafter.views.league_draft_settings' league.id %}" method="post">
     	{{ formset.management_form }}
     	{% csrf_token %}
+    	{% if formset.non_form_errors %}
+    		<div class="alert alert-danger">
+    		{{ formset.non_form_errors }}
+    		</div>
+    	{% endif %}
 	        <table class="table table-striped table-bordered table-hover">
 	            <thead>
 	                <tr>
@@ -22,12 +27,12 @@
 			       		<tr>
 			       			<td>{{ form.instance.manager }} - {{ form.id }}</td>
 			       			<td>{{ form.instance.name }}</td>
-			       			<td>{{ form.draft_pick }} {{ form.draft_pick.errors }}</td> 
+			       			<td>{{ form.draft_pick }} {% if form.errors %}<div class="alert alert-danger">{{ form.errors }}</div>{% endif %}</td> 
 			       		</tr>
 		            {% endfor %}
-	        		<input type="submit" value="Submit" />
 	            </tbody>
 	        </table>
+	        <input type="submit" value="Submit" />
         </form>
     </div>
     <script>

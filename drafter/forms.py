@@ -1,5 +1,6 @@
 from django.forms import ModelForm, ValidationError
-from drafter.models import League, User
+from django.forms.models import BaseModelFormSet
+from drafter.models import League, User, FantasyTeam
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -28,3 +29,20 @@ class UserCreationForm(UserCreationForm):
         except User.DoesNotExist:
             return username
         raise ValidationError(self.error_messages['duplicate_username']) 
+
+class BaseDraftOrderFormSet(BaseModelFormSet):
+    def clean(self):
+        if any(self.errors):
+            # Don't bother validating the formset unless each form is valid on its own
+            return
+        picks = []
+        for form in self.forms:
+            pick = form.cleaned_data["draft_pick"]
+            if pick in picks:
+                raise ValidationError("Draft picks must be distinct")
+            elif pick > form.instance.league.size:
+                raise ValidationError("Draft pick can not exceed number of teams in the league")
+                
+            picks.append(pick)
+        
+        
