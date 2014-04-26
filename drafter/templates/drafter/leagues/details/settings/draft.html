@@ -12,6 +12,11 @@
     		<div class="alert alert-danger">
     		{{ formset.non_form_errors }}
     		</div>
+		{% endif %}
+		{% if success %}    	
+    		<div class="alert alert-success">
+    		Successfully saved settings.
+    		</div>
     	{% endif %}
 	        <table class="table table-striped table-bordered table-hover">
 	            <thead>

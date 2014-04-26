@@ -5,6 +5,11 @@
 {% endblock %}
 {% block league_content %}
     {{ form.errors }}
+    {% if success %}    	
+ 		<div class="alert alert-success">
+ 		Successfully saved settings.
+ 		</div>
+   	{% endif %}
     <form action="{% url 'drafter.views.league_settings' league.id %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
