@@ -11,6 +11,7 @@ class DrafterViewsTestCase(TestCase):
     def setUp(self):
         self.testUser = User.objects.create_user(username='testUser', password='test1234')
         self.testLeague = League.objects.create(name="testLeague", public=True, size=12, commish_id=self.testUser.id)
+        
     """
     Test the main site
     """    
