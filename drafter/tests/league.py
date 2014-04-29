@@ -13,6 +13,13 @@ class LeagueViewsTestCase(TestCase):
         self.testLeague = League.objects.create(name="testLeague", public=True, size=12, commish_id=self.testUser.id)
     
     """
+    Test league list view
+    """
+    def test_league_list(self):
+        response = self.client.get(reverse('drafter.views.users'))
+        self.assertEqual(response.status_code, 200, "Status code not OK (200): " + str(response.status_code))
+    
+    """
     Test league creation view
     Test that a guest gets redirects to homepage 
     Test that a logged in user can create a league
@@ -38,20 +45,58 @@ class LeagueViewsTestCase(TestCase):
         self.assertRedirects(response, reverse('drafter.views.league', kwargs={'league_id': test_league_obj.id-1 }), target_status_code=302)
         
     """
-    Test league detail view
+    Test default league view
     """
-    def test_league_detail(self):
+    def test_league_default(self):
         response = self.client.get(reverse('drafter.views.league', kwargs={'league_id': self.testLeague.id }))
         self.assertRedirects(response, reverse('drafter.views.league_standings', kwargs={'league_id': self.testLeague.id }))
+        
     """
-    Test league list view
-    """
-    def test_league_list(self):
-        response = self.client.get(reverse('drafter.views.users'))
-        self.assertEqual(response.status_code, 200, "Status code not OK (200): " + str(response.status_code))
-    """
-    Test draft detail view
-    """
-    def test_draft_detail(self):
+    Test league standings view
+    """    
+    def test_league_standings(self):
         pass
-
+    
+    """
+    Test league rosters view
+    """
+    def test_league_rosters(self):
+        pass
+    
+    """
+    Test league scoring view
+    """
+    def test_league_scoring(self):
+        pass
+    
+    """
+    Test league playoff view
+    """
+    def test_league_playoffs(self):
+        pass
+    
+    """
+    Test league schedule view
+    """
+    def test_league_schedule(self):
+        pass
+    
+    """
+    Test league draft view
+    This is the real-time drafting app!
+    Consider a different test suite for this
+    """
+    def test_league_draft(self):
+        pass
+    
+    """
+    Test league settings view
+    """
+    def test_league_settings(self):
+        pass
+    
+    """
+    Test draft settings view
+    """
+    def test_draft_settings(self):
+        pass
