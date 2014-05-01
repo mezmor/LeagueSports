@@ -13,18 +13,33 @@ class UserViewsTestCase(TestCase):
     
     """
     Test the user list view
+    Access: 
+        - Auth'd user has access
+        - Guest user has access
+    Visibility:
+        All users should be visible to all other users
     """
     def test_user_list(self):
         pass
     
     """
     Test the user creation view
+    Access: 
+        - Auth'd user does not have access
+        - Guest user has access
+    Visibility:
+    Verify that a new user is created
+    Verify the correct form fields are present in the UserCreationForm
     """
     def test_user_creation(self):
         pass
     
     """
     Test the user detail view
+    Access: 
+        - Auth'd user 
+        - Guest user
+    Visibility:
     """
     def test_user_detail(self):
         pass
