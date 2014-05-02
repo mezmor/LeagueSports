@@ -30,7 +30,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             self.close()
             
         # Check for sessionid in cookie
-        cookie_dict = dict(item.split("=") for item in cookie.split(";"))
+        cookie_dict = dict(item.strip().split("=") for item in cookie.split(";"))
         if not "sessionid" in cookie_dict.keys():
             self.close()
         
@@ -39,7 +39,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             print cookie_dict
             self.close()
         
-        sessionid = cookie_dict.get("sessionid") # Sometimes Malfunctioning in Incognito mode
+        sessionid = cookie_dict.get("sessionid")
         
         # Check if session id exists
         print "Getting sessionid: " + sessionid
