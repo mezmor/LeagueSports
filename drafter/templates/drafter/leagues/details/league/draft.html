@@ -19,20 +19,23 @@
     $('#draft-tab').addClass('active');
     var ws = new WebSocket("ws://localhost:8888/ws");
     ws.onopen = function() {
-    	ws.send("league::{{ league_id }}")
+    	message = {}
+    	message['status'] = 'league'
+    	message['data'] = {{ league_id }};
+    	ws.send(JSON.stringify(message));
     };
     ws.onmessage = function (evt) {
-        data = evt.data.split("::");
-        if(data[0] === "join"){
-        	$('#user-list').append("<tr id=\"" + data[1] + "\"><td>" + data[1] + "</td><td></td></tr>");
+    	message = JSON.parse(evt.data)
+    	console.log(message);
+        if(message['status'] === "join"){
+        	for (var iter = 0; iter < message['data'].length; iter++){
+        		$('#user-list').append("<tr id=\"" + message['data'][iter] + "\"><td>" + message['data'][iter] + "</td><td></td></tr>");
+        	}
         }
-        else if(data[0] === "leave"){
-        	element = '#' + data[1]
+        else if(message['status'] === "leave"){
+        	element = '#' + message['data']
         	$(element).remove()
         }
     };
-    $('#data-button').click(function(){
-    	ws.send("session::{{ request.COOKIES.sessionid }}");
-    });
     </script>
 {% endblock %}

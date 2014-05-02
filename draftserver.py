@@ -2,6 +2,7 @@ import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
+import json
 
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "LeagueSports.settings")
@@ -66,16 +67,15 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         
         print 'new connection'
       
-    def on_message(self, message):
-        data = message.split("::")
-        print 'data received: %s' % data
-        if len(data) < 2:
+    def on_message(self, packet):
+        message = json.loads(packet)
+        if message['data'] is None:
             return
         # If we receive league data, the connection should be in the connection buffer
-        if data[0] == 'league':
+        if message['status'] == 'league':
             if self not in connection_buffer:
                 return
-            self.leagueid = data[1] # Keep a reference to the current leagueid
+            self.leagueid = message['data'] # Keep a reference to the current leagueid
             try:
                 connections[self.leagueid].append(self)
             except KeyError:
@@ -85,18 +85,32 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             
             # Notify all connections in the pool of the new connection
             # Notify the new connection of all the connections in the pool
-            message = "join::" + str(self.user.username)
+            send_message = {}
+            send_message['status'] = 'join'
+            send_message['data'] = []
+            send_message['data'].append(str(self.user.username))
+            # Get all connection usernames
             for connection in connections[self.leagueid]:
                 if connection is not self:
-                    connection.write_message(message)
-                self.write_message("join::"+str(connection.user.username))
+                    send_message['data'].append(str(connection.user.username))
+            # Send existing connection's usernames to the connecting client
+            self.write_message(json.dumps(send_message))
+            send_message['data'] = [str(self.user.username)]
+            # Send the connecting client to the existing connections
+            for connection in connections[self.leagueid]:
+                if connection is not self:
+                    connection.write_message(json.dumps(send_message))
+                    
+            
         
     def on_close(self):
         # Remove this connection from the connections pool
-        message = "leave::" + str(self.user.username)
+        send_message = {}
+        send_message['status'] = 'leave'
+        send_message['data'] = str(self.user.username)
         for connection in connections[self.leagueid]:
             if connection is not self:
-                connection.write_message(message)
+                connection.write_message(json.dumps(send_message))
         connections[self.leagueid].remove(self)
         print 'connection closed'
         
