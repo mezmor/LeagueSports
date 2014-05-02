@@ -26,7 +26,6 @@
     };
     ws.onmessage = function (evt) {
     	message = JSON.parse(evt.data)
-    	console.log(message);
         if(message['status'] === "join"){
         	for (var iter = 0; iter < message['data'].length; iter++){
         		$('#user-list').append("<tr id=\"" + message['data'][iter] + "\"><td>" + message['data'][iter] + "</td><td></td></tr>");
