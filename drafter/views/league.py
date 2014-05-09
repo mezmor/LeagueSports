@@ -125,18 +125,19 @@ View a league's commish panel
 @login_required
 def league_settings(request, league_id=None):
     league = League.objects.get(id=league_id)
-    if league.commish == request.user:
-        success = False
-        if request.method == 'POST':
-            form = LeagueEditForm(request.POST, instance=league)
-            if form.is_valid():
-                form.save()
-                success = True
-        else:
-            form = LeagueEditForm(instance=league) 
-        return render(request, 'drafter/leagues/details/settings/settings.html', { 'league_id': league_id, 'league': league, 'form': form, 'success': success })
-    else:
+    if request.user != league.commish:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    
+    saved = False
+    form_data = request.POST if request.POST else None
+    form = LeagueEditForm(form_data, instance=league)
+     
+    if form.is_valid():
+        form.save()
+        saved = True
+        
+    return render(request, 'drafter/leagues/details/settings/settings.html', { 'league_id': league_id, 'league': league, 'form': form, 'saved': saved })
+        
 
 """
 View a league's draft settings
@@ -144,16 +145,16 @@ View a league's draft settings
 @login_required
 def league_draft_settings(request, league_id=None):
     league = League.objects.get(id=league_id)
-    if league.commish == request.user:
-        success = False
-        DraftOrderFormSet = modelformset_factory(FantasyTeam, fields=("draft_pick", ), formset=BaseDraftOrderFormSet, max_num=league.teams.count(), extra=0)
-        if request.method == 'POST':
-            formset = DraftOrderFormSet(request.POST, queryset=FantasyTeam.objects.filter(league=league))
-            if formset.is_valid():
-                formset.save()
-                success = True
-        else:
-            formset = DraftOrderFormSet(queryset=FantasyTeam.objects.filter(league=league))
-        return render(request, 'drafter/leagues/details/settings/draft.html', { 'league_id': league_id, 'league': league, 'formset': formset, 'success': success })
-    else:
+    if request.user != league.commish:
         return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+    
+    saved = False
+    DraftOrderFormSet = modelformset_factory(FantasyTeam, fields=("draft_pick", ), formset=BaseDraftOrderFormSet, max_num=league.teams.count(), extra=0)
+    formset_data = request.POST if request.POST else None
+    formset = DraftOrderFormSet(formset_data, queryset=FantasyTeam.objects.filter(league=league))
+    
+    if formset.is_valid():
+        formset.save()
+        saved = True
+        
+    return render(request, 'drafter/leagues/details/settings/draft.html', { 'league_id': league_id, 'league': league, 'formset': formset, 'saved': saved })

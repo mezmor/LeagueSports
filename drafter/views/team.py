@@ -77,6 +77,6 @@ def delete_team(request, league_id=None, user_id=None):
         except FantasyTeam.DoesNotExist:
             team = None
         # Delete the FantasyTeam object if the requester is the user or the league commish and the team exists
-        if request.user.id == int(user_id) or request.user == league.commish and team is not None:
+        if team is not None and request.user.id == int(user_id) or request.user == league.commish:
             team.delete()
     return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))

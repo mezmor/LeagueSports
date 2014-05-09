@@ -85,14 +85,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             
             # Notify all connections in the pool of the new connection
             # Notify the new connection of all the connections in the pool
-            send_message = {}
-            send_message['status'] = 'join'
-            send_message['data'] = []
-            send_message['data'].append(str(self.user.username))
             # Get all connection usernames
-            for connection in connections[self.leagueid]:
-                if connection is not self:
-                    send_message['data'].append(str(connection.user.username))
+            send_message = {'status': 'join', 'data': [str(conn.user.username) for conn in connections]}
             # Send existing connection's usernames to the connecting client
             self.write_message(json.dumps(send_message))
             send_message['data'] = [str(self.user.username)]

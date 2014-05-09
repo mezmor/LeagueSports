@@ -158,3 +158,31 @@ As far as displaying the right content is concerned.
     - [ ] schedule.html
     - [ ] transactions.html
     - [ ] settings.html
+    
+  View:  
+- Implement is_commish decorator
+- Implement template_values = {}
+- instead of try: except: delete, just do delete
+- short ifs first
+  Realtime:
+- connections = defaultdict(list) over connections = {}, always append
+- prune connection_buffer in on_close
+- remove self from connection_buffer in on_close
+
+
+
+@login_required
+def league_settings(request, league_id=None):
+    league = League.objects.get(id=league_id)
+    if league.commish != request.user:
+        return redirect(reverse('drafter.views.league', kwargs={ 'league_id': league_id }))
+ 
+    saved = False
+    form_data = request.POST if request.POST else None
+    form = LeagueEditForm(form_data, instance=league)
+        
+    if form.is_valid():
+        form.save()
+        saved = True
+ 
+    return render(request, 'drafter/leagues/details/settings/settings.html', { ... })

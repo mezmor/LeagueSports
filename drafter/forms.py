@@ -42,7 +42,6 @@ class BaseDraftOrderFormSet(BaseModelFormSet):
                 raise ValidationError("Draft picks must be distinct")
             elif pick > form.instance.league.size:
                 raise ValidationError("Draft pick can not exceed number of teams in the league")
-                
             picks.append(pick)
         
         
