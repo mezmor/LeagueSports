@@ -160,10 +160,10 @@ As far as displaying the right content is concerned.
     - [ ] settings.html
     
   View:  
+- short ifs first
 - Implement is_commish decorator
 - Implement template_values = {}
 - instead of try: except: delete, just do delete
-- short ifs first
   Realtime:
 - connections = defaultdict(list) over connections = {}, always append
 - prune connection_buffer in on_close
